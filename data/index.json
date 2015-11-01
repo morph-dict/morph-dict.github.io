@@ -1,6 +1,6 @@
 {
   "root": 4439343,
-  "linesPerFile": 500,
+  "itemsPerFile": 500,
   "treeDir": "tree",
   "dictLexDir": "dict_lexs",
   "dictParadigmDir": "dict_paradigms"

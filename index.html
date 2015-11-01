@@ -12,23 +12,37 @@
             })
         }
 
-        function search(toSearch) {
+        function indexResolver(perFile) {
+            return function(index) {
+                return {
+                    base: Math.floor(index / perFile),
+                    offset: index % perFile
+                }
+            }
+        }
 
-            return jPromise($.ajax("data/index.json")).then(function(indexFile){
-                return new Promise(function (resolve, fail) {
+        function search(toSearch) {
+            var dataRoot = "data";
+
+
+            return jPromise($.ajax(dataRoot+"/index.json")).then(function(indexFile){
+                var index = indexResolver(indexFile.itemsPerFile);
+                var treeDir = dataRoot + "/" + indexFile.treeDir;
+
+                var promise = new Promise(function (resolve, fail) {
                     function search(nextNodeIndex, rest) {
-                        var file = "data/" + Math.floor(nextNodeIndex / indexFile.linesPerFile) + ".json";
-                        console.log("search: " + file);
+
+                        nextNodeIndex = index(nextNodeIndex);
+
+                        var file = treeDir + "/" + nextNodeIndex.base + ".json";
                         jPromise($.ajax(file)).then(function (data) {
-                            var offset = nextNodeIndex % indexFile.linesPerFile;
-                            console.log("search done: " + file + " " + offset);
-                            var next = data[offset];
+                            var next = data[nextNodeIndex.offset];
                             if (rest.length == 0) {
-                                if(next[1]) {
-                                    resolve({status:"found", data:next[1]});
+                                if (next[1]) {
+                                    resolve({status: "found", data: next[1]});
                                 }
                                 else {
-                                    resolve({status:"not_found", data:toSearch});
+                                    resolve({status: "not_found", data: toSearch});
                                 }
                             }
                             else {
@@ -38,16 +52,24 @@
                                     search(branchIndex, rest.substr(1));
                                 }
                                 else {
-                                    resolve({status:"not_found", data:toSearch});
+                                    resolve({status: "not_found", data: toSearch});
                                 }
                             }
                         }).catch(function (xhr, e) {
-                            console.log("err");
                             fail(e);
                         })
                     }
+
                     search(indexFile.root, toSearch);
                 });
+
+                promise = promise.then(function(data){
+                    if(data.status == "found") {
+                        return data;
+                    }
+                });
+
+                return promise;
             });
         }
 
