@@ -18,11 +18,18 @@
                 return new Promise(function (resolve, fail) {
                     function search(nextNodeIndex, rest) {
                         var file = "data/" + Math.floor(nextNodeIndex / indexFile.linesPerFile) + ".json";
-                        $.ajax(file).promise().then(function (data) {
+                        console.log("search: " + file);
+                        jPromise($.ajax(file)).then(function (data) {
                             var offset = nextNodeIndex % indexFile.linesPerFile;
+                            console.log("search done: " + file + " " + offset);
                             var next = data[offset];
                             if (rest.length == 0) {
-                                resolve(next[1]);
+                                if(next[1]) {
+                                    resolve({status:"found", data:next[1]});
+                                }
+                                else {
+                                    resolve({status:"not_found", data:toSearch});
+                                }
                             }
                             else {
                                 var branches = next[0];
@@ -31,10 +38,11 @@
                                     search(branchIndex, rest.substr(1));
                                 }
                                 else {
-                                    resolve("not found: " + toSearch);
+                                    resolve({status:"not_found", data:toSearch});
                                 }
                             }
-                        }, function (xhr, e) {
+                        }).catch(function (xhr, e) {
+                            console.log("err");
                             fail(e);
                         })
                     }
