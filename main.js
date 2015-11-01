@@ -92,83 +92,83 @@ function search(toSearch) {
             search(indexFile.root, toSearch);
         })
 
-            // Make it looks better
-            .then(function(data){
-                return data.map(function(x){
-                    return {
-                        ancode: x[0],
-                        lexemeRec: x[1]
-                    }
-                });
-            })
+        // Make it looks better
+        .then(function(data){
+            return data.map(function(x){
+                return {
+                    ancode: x[0],
+                    lexemeRec: x[1]
+                }
+            });
+        })
 
-            // Fetch lexeme rec
-            .then(function(data){
-                return Promise.all(data.map(function(node){
-                    var index = indexResolver(indexFile.dictLexItemsPerFile);
-                    var idx = index(node.lexemeRec);
-                    var fileName = dictLexDir + "/"  + idx.base + ".json";
-                    return jqPromise($.ajax(fileName)).then(function(lexemeRecFile){
-                        var lexemeRec = lexemeRecFile[idx.offset];
+        // Fetch lexeme rec
+        .then(function(data){
+            return Promise.all(data.map(function(node){
+                var index = indexResolver(indexFile.dictLexItemsPerFile);
+                var idx = index(node.lexemeRec);
+                var fileName = dictLexDir + "/"  + idx.base + ".json";
+                return jqPromise($.ajax(fileName)).then(function(lexemeRecFile){
+                    var lexemeRec = lexemeRecFile[idx.offset];
+                    return $.extend(node, {
+                        lexemeRec: {
+                            basis: lexemeRec[0],
+                            paradigmNum: lexemeRec[1],
+                            accentParadigmNum: lexemeRec[2],
+                            userSessionNum: lexemeRec[3],
+                            ancode: lexemeRec[4],
+                            prefixParadigmNum: lexemeRec[5]
+                        }
+                    })
+                })
+            }))
+        })
+
+        // Fetch paradigms
+        .then(function(data){
+            return Promise.all(data.map(function(node){
+                var index = indexResolver(indexFile.dictParadigmItemsPerFile);
+                var idx = index(node.lexemeRec.paradigmNum);
+                var fileName = dictParadigmDir + "/"  + idx.base + ".json";
+                return jqPromise($.ajax(fileName)).then(function(paradigmRulesFile){
+                    var paradigmRules = paradigmRulesFile[idx.offset];
+                    paradigmRules = paradigmRules.map(function(rule){
+                        return {
+                            ending: rule[0],
+                            ancode: rule[1],
+                            prefix: rule[2]
+                        }
+                    });
+                    return $.extend(node, {
+                        paradigmRules: paradigmRules
+                    })
+                })
+            }))
+        })
+
+        .then(function(data){
+            return Promise.all(data.map(function(node){
+                if(node.prefixParadigmNum!==null) {
+                    var index = indexResolver(indexFile.dictPrefixItemsPerFile);
+                    var idx = index(node.lexemeRec.prefixParadigmNum);
+                    var fileName = dictPrefixDir + "/"  + idx.base + ".json";
+                    return jqPromise($.ajax(fileName)).then(function(prefixFile){
+                        var prefix = prefixFile[idx.offset];
                         return $.extend(node, {
-                            lexemeRec: {
-                                basis: lexemeRec[0],
-                                paradigmNum: lexemeRec[1],
-                                accentParadigmNum: lexemeRec[2],
-                                userSessionNum: lexemeRec[3],
-                                ancode: lexemeRec[4],
-                                prefixParadigmNum: lexemeRec[5]
-                            }
+                            prefix: prefix
                         })
                     })
-                }))
-            })
+                }
+                else {
+                    return Promise.resolve(node);
+                }
+            }))
+        })
 
-            // Fetch paradigms
-            .then(function(data){
-                return Promise.all(data.map(function(node){
-                    var index = indexResolver(indexFile.dictParadigmItemsPerFile);
-                    var idx = index(node.lexemeRec.paradigmNum);
-                    var fileName = dictParadigmDir + "/"  + idx.base + ".json";
-                    return jqPromise($.ajax(fileName)).then(function(paradigmRulesFile){
-                        var paradigmRules = paradigmRulesFile[idx.offset];
-                        paradigmRules = paradigmRules.map(function(rule){
-                            return {
-                                ending: rule[0],
-                                ancode: rule[1],
-                                prefix: rule[2]
-                            }
-                        });
-                        return $.extend(node, {
-                            paradigmRules: paradigmRules
-                        })
-                    })
-                }))
-            })
-
-            .then(function(data){
-                return Promise.all(data.map(function(node){
-                    if(node.prefixParadigmNum!==null) {
-                        var index = indexResolver(indexFile.dictPrefixItemsPerFile);
-                        var idx = index(node.lexemeRec.prefixParadigmNum);
-                        var fileName = dictPrefixDir + "/"  + idx.base + ".json";
-                        return jqPromise($.ajax(fileName)).then(function(prefixFile){
-                            var prefix = prefixFile[idx.offset];
-                            return $.extend(node, {
-                                prefix: prefix
-                            })
-                        })
-                    }
-                    else {
-                        return Promise.resolve(node);
-                    }
-                }))
-            })
-
-            .then(function(data){
-                console.log(data);
-                return data;
-            })
+        .then(function(data){
+            console.log(data);
+            return data;
+        })
 
     });
 }
