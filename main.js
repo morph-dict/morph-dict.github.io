@@ -56,7 +56,6 @@ function search(toSearch) {
 
                 var promise;
                 if(cache[file]) {
-                    console.log("cache: " + file);
                     promise = Promise.resolve(cache[file]);
                 }
                 else {
