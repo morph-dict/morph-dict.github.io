@@ -1,7 +1,11 @@
 {
   "root": 4439343,
-  "itemsPerFile": 500,
+  "treeItemsPerFile": 500,
+  "dictLexItemsPerFile": 250,
+  "dictParadigmItemsPerFile": 10,
+  "dictPrefixItemsPerFile": 500,
   "treeDir": "tree",
   "dictLexDir": "dict_lexs",
-  "dictParadigmDir": "dict_paradigms"
+  "dictParadigmDir": "dict_paradigms",
+  "dictPrefixDir": "dict_prefixes"
 }

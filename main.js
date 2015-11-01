@@ -39,13 +39,15 @@ function search(toSearch) {
 
 
     return jqPromise($.ajax(dataRoot+"/index.json")).then(function(indexFile){
-        var index = indexResolver(indexFile.itemsPerFile);
+
         var treeDir = dataRoot + "/" + indexFile.treeDir;
         var dictLexDir = dataRoot + "/" + indexFile.dictLexDir;
         var dictParadigmDir = dataRoot + "/" + indexFile.dictParadigmDir;
+        var dictPrefixDir = dataRoot + "/" + indexFile.dictPrefixDir;
 
         return new Promise(function (resolve, fail) {
             function search(nextNodeIndex, rest) {
+                var index = indexResolver(indexFile.treeItemsPerFile);
 
                 nextNodeIndex = index(nextNodeIndex);
 
@@ -90,6 +92,7 @@ function search(toSearch) {
             // Fetch lexeme rec
             .then(function(data){
                 return Promise.all(data.map(function(node){
+                    var index = indexResolver(indexFile.dictLexItemsPerFile);
                     var idx = index(node.lexemeRec);
                     var fileName = dictLexDir + "/"  + idx.base + ".json";
                     return jqPromise($.ajax(fileName)).then(function(lexemeRecFile){
@@ -111,6 +114,7 @@ function search(toSearch) {
             // Fetch paradigms
             .then(function(data){
                 return Promise.all(data.map(function(node){
+                    var index = indexResolver(indexFile.dictParadigmItemsPerFile);
                     var idx = index(node.lexemeRec.paradigmNum);
                     var fileName = dictParadigmDir + "/"  + idx.base + ".json";
                     return jqPromise($.ajax(fileName)).then(function(paradigmRulesFile){
@@ -126,6 +130,25 @@ function search(toSearch) {
                             paradigmRules: paradigmRules
                         })
                     })
+                }))
+            })
+
+            .then(function(data){
+                return Promise.all(data.map(function(node){
+                    if(node.prefixParadigmNum!==null) {
+                        var index = indexResolver(indexFile.dictPrefixItemsPerFile);
+                        var idx = index(node.lexemeRec.prefixParadigmNum);
+                        var fileName = dictPrefixDir + "/"  + idx.base + ".json";
+                        return jqPromise($.ajax(fileName)).then(function(prefixFile){
+                            var prefix = prefixFile[idx.offset];
+                            return $.extend(node, {
+                                prefix: prefix
+                            })
+                        })
+                    }
+                    else {
+                        return Promise.resolve(node);
+                    }
                 }))
             })
 
