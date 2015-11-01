@@ -47,6 +47,7 @@
 
             $("#search").submit(function(e){
                 var toSearch = $("#word").val();
+                $("#result").text("searching...");
                 search(toSearch).then(function(result){
                     $("#result").text(JSON.stringify(result));
                 }).catch(function(e){
