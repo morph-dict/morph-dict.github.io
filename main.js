@@ -114,10 +114,18 @@ function search(toSearch) {
             .then(function(data){
                 return Promise.all(data.map(function(node){
                     var idx = index(node.lexemeRec.paradigmNum);
-                    var fileName = dictLexDir + "/"  + idx.base + ".json";
+                    var fileName = dictParadigmDir + "/"  + idx.base + ".json";
                     return jqPromise($.ajax(fileName)).then(function(paradigmRulesFile){
+                        var paradigmRules = paradigmRulesFile[idx.offset];
+                        paradigmRules = paradigmRules.map(function(rule){
+                            return {
+                                ending: rule[0],
+                                ancode: rule[1],
+                                prefix: rule[2]
+                            }
+                        });
                         return _.extend(node, {
-                            paradigmRules: paradigmRulesFile[idx.offset]
+                            paradigmRules: paradigmRules
                         })
                     })
                 }))
