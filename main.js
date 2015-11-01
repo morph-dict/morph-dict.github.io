@@ -46,13 +46,27 @@ function search(toSearch) {
         var dictPrefixDir = dataRoot + "/" + indexFile.dictPrefixDir;
 
         return new Promise(function (resolve, fail) {
+            var cache = {};
             function search(nextNodeIndex, rest) {
                 var index = indexResolver(indexFile.treeItemsPerFile);
 
                 nextNodeIndex = index(nextNodeIndex);
 
                 var file = treeDir + "/" + nextNodeIndex.base + ".json";
-                jqPromise($.ajax(file)).then(function (data) {
+
+                var promise;
+                if(cache[file]) {
+                    console.log("cache: " + file);
+                    promise = Promise.resolve(cache[file]);
+                }
+                else {
+                    promise = jqPromise($.ajax(file)).then(function(data){
+                        cache[file] = data;
+                        return data;
+                    });
+                }
+
+                promise.then(function (data) {
                     var next = data[nextNodeIndex.offset];
                     if (rest.length == 0) {
                         if (next[1]) {
