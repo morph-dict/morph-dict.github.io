@@ -94,17 +94,15 @@ function search(toSearch) {
                     var fileName = dictLexDir + "/"  + idx.base + ".json";
                     return jqPromise($.ajax(fileName)).then(function(lexemeRecFile){
                         var lexemeRec = lexemeRecFile[idx.offset];
-                        lexemeRec = {
-                            basis: lexemeRec[0],
-                            paradigmNum: lexemeRec[1],
-                            accentParadigmNum: lexemeRec[2],
-                            userSessionNum: lexemeRec[3],
-                            ancode: lexemeRec[4],
-                            prefixParadigmNum: lexemeRec[5]
-                        };
-
-                        return _.extend(node, {
-                            lexemeRec: lexemeRec
+                        return $.extend(node, {
+                            lexemeRec: {
+                                basis: lexemeRec[0],
+                                paradigmNum: lexemeRec[1],
+                                accentParadigmNum: lexemeRec[2],
+                                userSessionNum: lexemeRec[3],
+                                ancode: lexemeRec[4],
+                                prefixParadigmNum: lexemeRec[5]
+                            }
                         })
                     })
                 }))
@@ -124,7 +122,7 @@ function search(toSearch) {
                                 prefix: rule[2]
                             }
                         });
-                        return _.extend(node, {
+                        return $.extend(node, {
                             paradigmRules: paradigmRules
                         })
                     })
