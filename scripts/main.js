@@ -18,36 +18,22 @@
  * Author:  Nikolay Mavrenkov <koluch@koluch.ru>
  * Created: 01.11.2015 23:04
  */
-require.config({
-    baseUrl: "scripts",
-    paths: {
-        "jquery": "libs/jquery-2.1.4.min",
-        "react": "libs/react-0.14.1/build/react",
-        "react-dom": "libs/react-0.14.1/build/react-dom"
-    }
+
+var react = require('react'),
+    $ = require('jquery');
+
+var dataAccess = require('./data-access');
+$(function () {
+    alert('yeah!');
+    $("#search").submit(function (e) {
+        e.preventDefault();
+        var toSearch = $("#word").val();
+        $("#result").text("searching...");
+        dataAccess.search(toSearch).then(function (result) {
+            $("#result").text(JSON.stringify(result));
+        }).catch(function (e) {
+            throw e;
+        });
+    });
 });
-
-require(
-    [
-        "jquery",
-        "data-access",
-        "react",
-        "react-dom"
-    ],
-    function ($, dataAccess, React, ReactDom) {
-
-        $(function () {
-            $("#search").submit(function (e) {
-                var toSearch = $("#word").val();
-                $("#result").text("searching...");
-                dataAccess.search(toSearch).then(function (result) {
-                    $("#result").text(JSON.stringify(result));
-                }).catch(function (e) {
-                    throw e;
-                });
-                e.preventDefault();
-            });
-        })
-    }
-);
 

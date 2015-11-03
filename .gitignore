@@ -50,3 +50,6 @@ crashlytics.properties
 crashlytics-build.properties
 
 
+# NodeJS (npm/gulp/etc)
+node_modules
+build
