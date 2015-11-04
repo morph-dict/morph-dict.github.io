@@ -19,7 +19,8 @@
  * Created: 02.11.2015 15:47
  */
 
-var $ = require('jquery'); //todo: use http-js instead of jquery to make http calls
+var $ = require('jquery'),  //todo: use http-js instead of jquery to make http calls
+    _ = require('underscore');
 
 function jqPromise(def) {
     return new Promise(function (done, fail) {
@@ -172,6 +173,10 @@ module.exports.search = function (toSearch) {
             }))
         })
 
+        // Group founded lexeme recs by paradigms and prefixes
+        .then(function(data){
+             return Promise.resolve(_.values( _.groupBy(data, (x) => x.lexemeRec.paradigmNum) ));
+        })            
         .then(function (data) {
             console.log(data);
             return data;

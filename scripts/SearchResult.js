@@ -23,49 +23,62 @@ var React = require('react');
 
 module.exports = React.createClass({
     render: function () {
-        if(this.props.search.state === 'waiting') {
+        if (this.props.search.state === 'waiting') {
             return <div>Вы еще ничего не искали :(</div> // todo: use another text
         }
-        else if (this.props.search.state === 'searching'){
+        else if (this.props.search.state === 'searching') {
             return <div>
-                        <b>Searching...</b>
-                   </div>;
+                <b>Searching...</b>
+            </div>;
         }
-        else if(this.props.search.state === 'done') {
+        else if (this.props.search.state === 'done') {
             // todo: use another text
 
             //<div>{JSON.stringify(this.props.search.result)}</div>
 
+
+            console.log(JSON.stringify(this.props.search.result));
+
             return (
                 <div>
                     <div><b>Результаты поиска</b></div>
-                    { this.props.search.result.map(function (item) {
-                        return (
-                            <div>
-                                <h4>Next ancode '{item.ancode}'</h4>
-                                <h5>Lexeme rec</h5>
+                    {
+                        this.props.search.result.map(function (group) {
+                            var groupItemsHeader = group.map(function (item) {
+                                return (
+                                    <div key={item.ancode}>
+                                        <h4>Next ancode '{item.ancode}'</h4>
+                                        <h5>Lexeme rec</h5>
 
-                                <p>basis: {item.lexemeRec.basis}</p>
+                                        <div>basis: {item.lexemeRec.basis}</div>
 
-                                <p>paradigmNum: {item.lexemeRec.paradigmNum}</p>
+                                        <div>paradigmNum: {item.lexemeRec.paradigmNum}</div>
 
-                                <p>accentParadigmNum: {item.lexemeRec.accentParadigmNum}</p>
+                                        <div>accentParadigmNum: {item.lexemeRec.accentParadigmNum}</div>
 
-                                <p>userSessionNum: {item.lexemeRec.userSessionNum}</p>
+                                        <div>userSessionNum: {item.lexemeRec.userSessionNum}</div>
 
-                                <p>ancode: {item.lexemeRec.ancode}</p>
+                                        <div>ancode: {item.lexemeRec.ancode}</div>
 
-                                <p>prefixParadigmNum: {item.lexemeRec.prefixParadigmNum}</p>
-                                <h5>Rules</h5>
+                                        <div>prefixParadigmNum: {item.lexemeRec.prefixParadigmNum}</div>
+                                    </div>
+                                )
+                            });
+
+                            var item = group[0];
+
+                            var rules = (<div><h5> Rules </h5>
                                 <table>
+                                    <thead>
                                     <tr>
                                         <th>form</th>
                                         <th>ancode</th>
                                     </tr>
+                                    </thead>
                                     <tbody>
                                     {
                                         item.paradigmRules.map(function (rule) {
-                                            return <tr>
+                                            return <tr key={rule.prefix + "," + rule.ancode + "," + rule.ending}>
                                                 <td>
                                                     <span style={{color:"red"}}>{item.prefix}</span>
                                                     <span style={{color:"green"}}>{rule.prefix}</span>
@@ -76,13 +89,23 @@ module.exports = React.createClass({
                                             </tr>
                                         })
                                     }
-                                    </tbody>
+                                </tbody>
                                 </table>
+                            </div>);
 
-                            </div>
-                        )
+                            return (
+                                <div>
+                                    <h1>Group</h1>
+                                    { groupItemsHeader }
+                                    <h1>Rules</h1>
+                                    { rules }
+                                </div>
+                            )
 
-                    })}
+
+
+                        })
+                    }
                 </div>
             )
         }
