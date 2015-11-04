@@ -29,14 +29,14 @@ var dataAccess = require('./data-access'),
 $(function () {
 
     ReactDom.render(
-        <SearchResult/>,
+        React.createElement(SearchResult),
         document.getElementById("react")
     );
 
     $("#search").submit(function (e) {
         e.preventDefault();
         var toSearch = $("#word").val();
-        $("#result").text("searching...");
+        $("#result").text("searching.....");
         dataAccess.search(toSearch).then(function (result) {
             $("#result").text(JSON.stringify(result));
         }).catch(function (e) {

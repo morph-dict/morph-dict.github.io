@@ -19,10 +19,10 @@
  * Created: 04.11.2015 12:58
  */
 
- var React = require('react');
+var React = require('react');
 
- module.exports = React.createClass({
-     render: function(){
-        return <h1>Hello</h1>
-     }
- });
+module.exports = React.createClass({
+    render: function () {
+        return React.DOM.h1(null, "hello");
+    }
+});

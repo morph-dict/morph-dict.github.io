@@ -19,15 +19,82 @@
  * Created: 03.11.2015 22:56
  */
 
- var gulp = require('gulp'),
-     browserify = require('browserify'),
-     source = require('vinyl-source-stream');
-
+var gulp = require('gulp'),
+    gutil = require('gulp-util'),
+    watch = require('gulp-watch'),
+    symlink = require('gulp-watch'),
+    browserify = require('browserify'),
+    source = require('vinyl-source-stream'),
+    watchify = require('watchify'),
+    fs = require('fs');
 
 
 gulp.task('scripts', function(){
-    return browserify('scripts/main.js')
-        .bundle()
+    var bundle = browserify('scripts/main.js')
+        .bundle();
+    return bundle
         .pipe(source('app.js'))
         .pipe(gulp.dest('./build/'));
 });
+
+
+// Debug
+
+
+gulp.task('debug_html', function(){
+    var files = 'index.html';
+    return gulp.src(files)
+        .pipe(watch(files))
+        .pipe(gulp.dest('./debug/'))
+
+});
+
+gulp.task('debug_data', function(cb){
+    fs.mkdir('debug', function(e){
+        if(e !== null && e.code !== 'EEXIST') {
+            throw e;
+        }
+        else {
+            fs.symlink('../data', './debug/data', function(e){
+                if(e !== null && e.code !== 'EEXIST') {
+                    throw e;
+                }
+                else {
+                    cb();
+                }
+            })
+        }
+    });
+});
+
+gulp.task('debug_scripts', function(){
+    var bundler = browserify('scripts/main.js', {
+        debug: true,
+        cache: {},
+        packageCache: {},
+        fullPaths: true
+    });
+
+    bundler = watchify(bundler);
+
+    function rebundle() {
+        var bundle = bundler.bundle()
+            .pipe(source('app.js'))
+            .pipe(gulp.dest('./debug/scripts'));
+        return bundle
+    }
+
+    bundler.on('update', function() {
+        var start = Date.now();
+        gutil.log('Rebundle...');
+        rebundle().on('end', function(){
+            gutil.log("Done! Time: " + (Date.now() - start));
+        });
+    });
+
+    return rebundle();
+});
+
+gulp.task('debug', ['debug_data', 'debug_html', 'debug_scripts']);
+
+
