@@ -20,28 +20,13 @@
  */
 
 var React = require('react'),
-    ReactDom = require('react-dom'),
-    $ = require('jquery');
+    ReactDom = require('react-dom');
 
-var dataAccess = require('./data-access'),
-    SearchResult = require('./SearchResult');
+var Root = require('./Root');
 
-$(function () {
-
+document.addEventListener('DOMContentLoaded', function() {
     ReactDom.render(
-        React.createElement(SearchResult),
+        React.createElement(Root),
         document.getElementById("react")
     );
-
-    $("#search").submit(function (e) {
-        e.preventDefault();
-        var toSearch = $("#word").val();
-        $("#result").text("searching.....");
-        dataAccess.search(toSearch).then(function (result) {
-            $("#result").text(JSON.stringify(result));
-        }).catch(function (e) {
-            throw e;
-        });
-    });
 });
-

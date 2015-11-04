@@ -24,6 +24,7 @@ var gulp = require('gulp'),
     watch = require('gulp-watch'),
     symlink = require('gulp-watch'),
     browserify = require('browserify'),
+    reactify = require('reactify'),
     source = require('vinyl-source-stream'),
     watchify = require('watchify'),
     fs = require('fs');
@@ -75,19 +76,25 @@ gulp.task('debug_scripts', function(){
         fullPaths: true
     });
 
+    bundler = bundler.transform(reactify, {"es6": true});
+
     bundler = watchify(bundler);
 
     function rebundle() {
         var bundle = bundler.bundle()
+            .on('error',  gutil.log)
             .pipe(source('app.js'))
-            .pipe(gulp.dest(DEBUG_ROOT + '/scripts'));
+            .on('error', gutil.log)
+            .pipe(gulp.dest(DEBUG_ROOT + '/scripts'))
+            .on('error', gutil.log);
         return bundle
     }
 
     bundler.on('update', function() {
         var start = Date.now();
         gutil.log('Rebundle...');
-        rebundle().on('end', function(){
+        var bundle = rebundle();
+        bundle.on('end', function(){
             gutil.log("Done! Time: " + (Date.now() - start));
         });
     });
