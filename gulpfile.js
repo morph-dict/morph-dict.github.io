@@ -39,7 +39,7 @@ gulp.task('scripts', function(){
 
 
 // Debug
-
+var DEBUG_ROOT = './debug';
 
 gulp.task('debug_html', function(){
     var files = 'index.html';
@@ -50,12 +50,12 @@ gulp.task('debug_html', function(){
 });
 
 gulp.task('debug_data', function(cb){
-    fs.mkdir('debug', function(e){
+    fs.mkdir(DEBUG_ROOT, function(e){
         if(e !== null && e.code !== 'EEXIST') {
             throw e;
         }
         else {
-            fs.symlink('../data', './debug/data', function(e){
+            fs.symlink('../data', DEBUG_ROOT+'/data', function(e){
                 if(e !== null && e.code !== 'EEXIST') {
                     throw e;
                 }
@@ -80,7 +80,7 @@ gulp.task('debug_scripts', function(){
     function rebundle() {
         var bundle = bundler.bundle()
             .pipe(source('app.js'))
-            .pipe(gulp.dest('./debug/scripts'));
+            .pipe(gulp.dest(DEBUG_ROOT + '/scripts'));
         return bundle
     }
 
