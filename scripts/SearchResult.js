@@ -16,32 +16,13 @@
  * --------------------------------------------------------------------
  *
  * Author:  Nikolay Mavrenkov <koluch@koluch.ru>
- * Created: 01.11.2015 23:04
+ * Created: 04.11.2015 12:58
  */
 
-var React = require('react'),
-    ReactDom = require('react-dom'),
-    $ = require('jquery');
+ var React = require('react');
 
-var dataAccess = require('./data-access'),
-    SearchResult = require('./SearchResult');
-
-$(function () {
-
-    ReactDom.render(
-        <SearchResult/>,
-        document.getElementById("react")
-    );
-
-    $("#search").submit(function (e) {
-        e.preventDefault();
-        var toSearch = $("#word").val();
-        $("#result").text("searching...");
-        dataAccess.search(toSearch).then(function (result) {
-            $("#result").text(JSON.stringify(result));
-        }).catch(function (e) {
-            throw e;
-        });
-    });
-});
-
+ module.exports = React.createClass({
+     render: function(){
+        return <h1>Hello</h1>
+     }
+ });
