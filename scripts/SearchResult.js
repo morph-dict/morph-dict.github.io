@@ -23,8 +23,25 @@ var React = require('react');
 
 module.exports = React.createClass({
     render: function () {
-        return <div>
-                    {JSON.stringify(this.props.data)}
-               </div>;
+        if(this.props.search.state === 'waiting') {
+            return <div>Вы еще ничего не искали :(</div> // todo: use another text
+        }
+        else if (this.props.search.state === 'searching'){
+            return <div>
+                        <b>Searching...</b>
+                   </div>;
+        }
+        else if(this.props.search.state === 'done') {
+            // todo: use another text
+            return <div>
+                        <div><b>Результаты поиска</b></div>
+                        <div>{JSON.stringify(this.props.search.result)}</div>
+                   </div>
+        }
+        else {
+            throw new Error("Bad state: " + this.props.search.state);
+        }
+
+
     }
 });

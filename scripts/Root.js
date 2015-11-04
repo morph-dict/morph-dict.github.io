@@ -28,28 +28,39 @@ module.exports = React.createClass({
 
     getInitialState: function () {
         return {
-            searchText: "частнопредпринимательский",
-            searchResult: {}
+            search: {
+                state: 'waiting',
+                text: 'частнопредпринимательский',
+                result: {}
+            }
         }
     },
 
-    onChangeSearchText: (e) => {
+    onChangeSearchText: function(e) {
         this.setState(update(this.state, {
-            searchText: {$set:e.target.value}
+            search: {
+                text: {$set:e.target.value}
+            }
         }));
     },
 
     onStartSearch: function (e) {
         e.preventDefault();
-        var toSearch = this.state.searchText;
+        var toSearch = this.state.search.text;
         this.setState(update(this.state, {
-            searchResult: {$set:"searching....."}
+            search: {
+                state: {$set:'searching'},
+                result: {$set:null}
+            }
         }));
 
         dataAccess.search(toSearch).then(function (result) {
-            console.log(this.state);
+            console.log(result);
             this.setState(update(this.state, {
-                searchResult: {$set:result}
+                search: {
+                    state: {$set:'done'},
+                    result: {$set:result}
+                }
             }));
         }.bind(this)).catch(function (e) {
             throw e;
@@ -61,10 +72,10 @@ module.exports = React.createClass({
         //<!-- псевдоабдоминальный - word with prefix -->
         return <form id="search" onSubmit={this.onStartSearch}>
                 <p>
-                    <label>Word form: <input type="text" id="word" value={this.state.searchText} onChange={this.onChangeSearchText}/></label>
+                    <label>Word form: <input type="text" id="word" value={this.state.search.text} onChange={this.onChangeSearchText}/></label>
                     <button type="submit" >Search</button>
                 </p>
-                <SearchResult data={this.state.searchResult}/>
+                <SearchResult search={this.state.search}/>
                </form>;
     }
 });
