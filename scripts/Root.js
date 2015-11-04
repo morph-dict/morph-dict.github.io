@@ -30,7 +30,7 @@ module.exports = React.createClass({
         return {
             search: {
                 state: 'waiting',
-                text: 'частнопредпринимательский',
+                text: 'псевдоабдоминальный',
                 result: {}
             }
         }

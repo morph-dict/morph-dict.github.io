@@ -33,10 +33,58 @@ module.exports = React.createClass({
         }
         else if(this.props.search.state === 'done') {
             // todo: use another text
-            return <div>
-                        <div><b>Результаты поиска</b></div>
-                        <div>{JSON.stringify(this.props.search.result)}</div>
-                   </div>
+
+            //<div>{JSON.stringify(this.props.search.result)}</div>
+
+            return (
+                <div>
+                    <div><b>Результаты поиска</b></div>
+                    { this.props.search.result.map(function (item) {
+                        return (
+                            <div>
+                                <h4>Next ancode '{item.ancode}'</h4>
+                                <h5>Lexeme rec</h5>
+
+                                <p>basis: {item.lexemeRec.basis}</p>
+
+                                <p>paradigmNum: {item.lexemeRec.paradigmNum}</p>
+
+                                <p>accentParadigmNum: {item.lexemeRec.accentParadigmNum}</p>
+
+                                <p>userSessionNum: {item.lexemeRec.userSessionNum}</p>
+
+                                <p>ancode: {item.lexemeRec.ancode}</p>
+
+                                <p>prefixParadigmNum: {item.lexemeRec.prefixParadigmNum}</p>
+                                <h5>Rules</h5>
+                                <table>
+                                    <tr>
+                                        <th>form</th>
+                                        <th>ancode</th>
+                                    </tr>
+                                    <tbody>
+                                    {
+                                        item.paradigmRules.map(function (rule) {
+                                            return <tr>
+                                                <td>
+                                                    <span style={{color:"red"}}>{item.prefix}</span>
+                                                    <span style={{color:"green"}}>{rule.prefix}</span>
+                                                    {item.lexemeRec.basis}
+                                                    <span style={{color:"blue"}}>{rule.ending}</span>
+                                                </td>
+                                                <td>{rule.ancode}</td>
+                                            </tr>
+                                        })
+                                    }
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        )
+
+                    })}
+                </div>
+            )
         }
         else {
             throw new Error("Bad state: " + this.props.search.state);

@@ -132,7 +132,7 @@ module.exports.search = function (toSearch) {
         // Fetch prefix
         .then(function (data) {
             return Promise.all(data.map(function (node) {
-                if (node.lexemeRec..prefixParadigmNum !== null) {
+                if (node.lexemeRec.prefixParadigmNum !== null) {
                     var index = indexResolver(indexFile.dictPrefixItemsPerFile);
                     var idx = index(node.lexemeRec.prefixParadigmNum);
                     var fileName = dictPrefixDir + "/" + idx.base + ".json";
