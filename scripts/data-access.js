@@ -175,13 +175,9 @@ module.exports.search = function (toSearch) {
 
         // Group founded lexeme recs by paradigms and prefixes
         .then(function(data){
-             return Promise.resolve(_.values( _.groupBy(data, (x) => x.lexemeRec.paradigmNum) ));
-        })            
-        .then(function (data) {
-            console.log(data);
-            return data;
-        });
-
+             return Promise.resolve(_.values( _.groupBy(data, function(x){ return x.lexemeRec.paradigmNum } )));
+        }); 
+            
         return promise;
     });
 };
