@@ -19,7 +19,8 @@
  * Created: 04.11.2015 12:58
  */
 
-var React = require('react');
+var React = require('react'),
+    _ = require('underscore');
 
 var rgramtab = require('./rgramtab');
 
@@ -82,6 +83,12 @@ module.exports = React.createClass({
                             + "," + firstItem.lexemeRec.ancode
                             + "," + firstItem.lexemeRec.prefixParadigmNum;
 
+
+                            var commonAttrs = rgramtab.ancodeAttrs(firstItem.lexemeRec.ancode);
+                            var commonRulesAttrs = _.intersection.apply(null, firstItem.paradigmRules.map((rule) => rgramtab.ancodeAttrs(rule.ancode)));
+
+                            commonAttrs = commonAttrs.concat(commonRulesAttrs);
+
                             return (
                                 <div key={key}>
                                     <h1>Group</h1>
@@ -102,7 +109,7 @@ module.exports = React.createClass({
                                         <div>userSessionNum: { firstItem.lexemeRec.userSessionNum }</div>
                                         <div>ancode: { firstItem.lexemeRec.ancode } ({
                                             (firstItem.lexemeRec.ancode)
-                                            ? rgramtab.ancodeAttrs(firstItem.lexemeRec.ancode).map((attr) => rgramtab.attrDesc(attr)).join(", ")
+                                            ? commonAttrs.map((attr) => rgramtab.attrDesc(attr)).join(", ")
                                             : ""
                                         })</div>
                                         <div>prefixParadigmNum: { firstItem.lexemeRec.prefixParadigmNum }</div>

@@ -30,7 +30,7 @@ module.exports = React.createClass({
         return {
             search: {
                 state: 'waiting',
-                text: 'псевдоабдоминальный',
+                text: 'стол',
                 result: {}
             }
         }
@@ -55,7 +55,6 @@ module.exports = React.createClass({
         }));
 
         dataAccess.search(toSearch).then(function (result) {
-            console.log(result);
             this.setState(update(this.state, {
                 search: {
                     state: {$set:'done'},
