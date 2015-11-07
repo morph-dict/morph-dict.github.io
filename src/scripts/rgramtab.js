@@ -777,23 +777,29 @@ module.exports.attrDesc = function(attr){
         case "пр": return "предложный падеж";
         case "зв": return "звательный падеж";
 
+        case "фам": return "фамилия";
+        case "имя": return "имя";
+        case "отч": return "отчество";
+
+
+        // Verbs
+        case "1л": return "первое лицо";
+        case "2л": return "второе лицо";
+        case "3л": return "третье лицо";
+
+        case "прш": return "прошедшее время";
+        case "нст": return "настоящее время";
+        case "буд": return "будущее время";
+
         case "0": return "0";
         case "2": return "2";
         case "разг": return "разг";
         case "арх": return "арх";
         case "аббр": return "аббр";
-        case "имя": return "имя";
-        case "отч": return "отч";
         case "сравн": return "сравн";
         case "прев": return "прев";
         case "безл": return "безл";
-        case "буд": return "буд";
-        case "прш": return "прш";
-        case "нст": return "нст";
         case "дст": return "дст";
-        case "1л": return "1л";
-        case "2л": return "2л";
-        case "3л": return "3л";
         case "пвл": return "пвл";
         case "стр": return "стр";
         case "вопр": return "вопр";
@@ -808,7 +814,6 @@ module.exports.attrDesc = function(attr){
         case "нс": return "нс";
         case "жарг": return "жарг";
         case "опч": return "опч";
-        case "фам": return "фам";
         case "притяж": return "притяж";
         default: throw new Error("Unknown attribute: " + attr);
     }
