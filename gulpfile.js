@@ -27,26 +27,53 @@ var gulp = require('gulp'),
     reactify = require('reactify'),
     source = require('vinyl-source-stream'),
     watchify = require('watchify'),
-    fs = require('fs');
+    fs = require('fs'),
+    streamify = require('gulp-streamify'),
+    uglify = require('gulp-uglify');
 
 
-gulp.task('scripts', function(){
-    var bundle = browserify('scripts/main.js')
-        .bundle();
-    return bundle
-        .pipe(source('app.js'))
-        .pipe(gulp.dest('./build/'));
+var DEBUG_ROOT = './debug';
+var SRC_ROOT = './src';
+var PROD_ROOT = '.';
+
+
+gulp.task('html', function(){
+    var files = SRC_ROOT + '/**.html';
+    return gulp.src(files)
+        .pipe(gulp.dest(PROD_ROOT))
+
 });
 
+gulp.task('scripts', function(){
+    var bundler = browserify(SRC_ROOT + '/scripts/main.js', {
+        debug: false,
+        cache: {},
+        packageCache: {},
+        fullPaths: true
+    });
 
-// Debug
-var DEBUG_ROOT = './debug';
+    bundler = bundler.transform(reactify, {"es6": true});
+
+    return bundler.bundle()
+        .on('error',  gutil.log)
+        .pipe(source('app.js'))
+        .on('error', gutil.log)
+        .pipe(streamify(uglify()))
+        .on('error', gutil.log)
+        .pipe(gulp.dest(PROD_ROOT + '/scripts'))
+        .on('error', gutil.log)
+});
+
+gulp.task('default', ['html', 'scripts']);
+
+
+//***************** Debug *****************
 
 gulp.task('debug_html', function(){
-    var files = 'index.html';
+    var files = SRC_ROOT + '/**.html';
     return gulp.src(files)
         .pipe(watch(files))
-        .pipe(gulp.dest('./debug/'))
+        .pipe(gulp.dest(DEBUG_ROOT))
 
 });
 
@@ -69,7 +96,7 @@ gulp.task('debug_data', function(cb){
 });
 
 gulp.task('debug_scripts', function(){
-    var bundler = browserify('scripts/main.js', {
+    var bundler = browserify(SRC_ROOT + '/scripts/main.js', {
         debug: true,
         cache: {},
         packageCache: {},
