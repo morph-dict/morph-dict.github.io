@@ -55,6 +55,7 @@ module.exports = React.createClass({
         }));
 
         dataAccess.search(toSearch).then(function (result) {
+            console.log(result);
             this.setState(update(this.state, {
                 search: {
                     state: {$set:'done'},
@@ -62,7 +63,17 @@ module.exports = React.createClass({
                 }
             }));
         }.bind(this)).catch(function (e) {
-            throw e;
+            if(e.status === "not_found") {
+                this.setState(update(this.state, {
+                    search: {
+                        state: {$set:'not_found'},
+                        result: {$set:null}
+                    }
+                }))
+            }
+            else {
+                throw e;
+            }
         }.bind(this));
     },
 

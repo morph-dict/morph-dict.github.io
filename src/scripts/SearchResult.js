@@ -118,6 +118,9 @@ module.exports = React.createClass({
                 </div>
             )
         }
+        else if (this.props.search.state === 'not_found') {
+            return <div>Ничего не найдено :(</div> // todo: use another text
+        }
         else {
             throw new Error("Bad state: " + this.props.search.state);
         }
