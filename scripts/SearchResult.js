@@ -21,6 +21,8 @@
 
 var React = require('react');
 
+var rgramtab = require('./rgramtab');
+
 module.exports = React.createClass({
     render: function () {
         if (this.props.search.state === 'waiting') {
@@ -47,7 +49,9 @@ module.exports = React.createClass({
                             var groupItemsHeader = group.map(function (item) {
                                 return (
                                     <div key={item.ancode}>
-                                        <h4>Next ancode '{item.ancode}'</h4>
+                                        <h4>Desc: { rgramtab.ancodeAttrs(item.ancode).map((attr) => {
+                                            return <span> { rgramtab.attrDesc(attr) }</span>
+                                        }) }</h4>
                                         <h5>Lexeme rec</h5>
 
                                         <div>basis: {item.lexemeRec.basis}</div>
