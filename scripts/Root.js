@@ -55,7 +55,6 @@ module.exports = React.createClass({
         }));
 
         dataAccess.search(toSearch).then(function (result) {
-            console.log(result);
             this.setState(update(this.state, {
                 search: {
                     state: {$set:'done'},
@@ -70,6 +69,7 @@ module.exports = React.createClass({
     render: function() {
 
         //<!-- псевдоабдоминальный - word with prefix -->
+        //<!-- ленина, пошла -->
         return <form id="search" onSubmit={this.onStartSearch}>
                 <p>
                     <label>Word form: <input type="text" id="word" value={this.state.search.text} onChange={this.onChangeSearchText}/></label>

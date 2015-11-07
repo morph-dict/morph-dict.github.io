@@ -38,45 +38,18 @@ module.exports = React.createClass({
 
             //<div>{JSON.stringify(this.props.search.result)}</div>
 
-
-            console.log(JSON.stringify(this.props.search.result));
-
             return (
                 <div>
                     <div><b>Результаты поиска</b></div>
                     {
-                        this.props.search.result.map(function (group, i) {
-                            var groupItemsHeader = group.map(function (item) {
-                                return (
-                                    <div key={item.ancode}>
-                                        <h4>Desc: { rgramtab.ancodeAttrs(item.ancode).map((attr) => {
-                                            return <span key={attr}> { rgramtab.attrDesc(attr) }</span>
-                                        }) }</h4>
-                                        <h5>Lexeme rec</h5>
-
-                                        <div>basis: {item.lexemeRec.basis}</div>
-
-                                        <div>paradigmNum: {item.lexemeRec.paradigmNum}</div>
-
-                                        <div>accentParadigmNum: {item.lexemeRec.accentParadigmNum}</div>
-
-                                        <div>userSessionNum: {item.lexemeRec.userSessionNum}</div>
-
-                                        <div>ancode: {item.lexemeRec.ancode}</div>
-
-                                        <div>prefixParadigmNum: {item.lexemeRec.prefixParadigmNum}</div>
-                                    </div>
-                                )
-                            });
-
-                            var firstItem = group[0];
-
+                        this.props.search.result.map(function (firstItem, i) {
                             var rules = (<div><h5> Rules </h5>
                                 <table>
                                     <thead>
                                     <tr>
                                         <th>form</th>
                                         <th>ancode</th>
+                                        <th>attrs</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -90,6 +63,11 @@ module.exports = React.createClass({
                                                     <span style={{color:"blue"}}>{rule.ending}</span>
                                                 </td>
                                                 <td>{rule.ancode}</td>
+                                                <td>
+                                                    {
+                                                        rgramtab.ancodeAttrs(rule.ancode).map((attr) => rgramtab.attrDesc(attr)).join(", ")
+                                                    }
+                                                </td>
                                             </tr>
                                         })
                                     }
@@ -99,16 +77,36 @@ module.exports = React.createClass({
 
                             var key = firstItem.lexemeRec.basis
                             + "," + firstItem.lexemeRec.paradigmNum
-                            + "," + firstItem.lexemeRec.accentParadigmNu
+                            + "," + firstItem.lexemeRec.accentParadigmNum
                             + "," + firstItem.lexemeRec.userSessionNum
-                            + "," + firstItem.lexemeRec.ancod
+                            + "," + firstItem.lexemeRec.ancode
                             + "," + firstItem.lexemeRec.prefixParadigmNum;
 
                             return (
                                 <div key={key}>
                                     <h1>Group</h1>
-                                    { groupItemsHeader }
-                                    <h1>Rules</h1>
+                                    <h3>Matched forms</h3>
+                                    { firstItem.matchedAncodes.map(function (ancode) {
+                                        return (
+                                            <div key={ancode}>
+                                                <h4>{
+                                                     rgramtab.ancodeAttrs(ancode).map((attr) => rgramtab.attrDesc(attr)).join(", ")
+                                                }</h4>
+                                            </div>
+                                        )
+                                    }) }
+                                    <h3>Lexeme</h3>
+                                        <div>basis: { firstItem.lexemeRec.basis }</div>
+                                        <div>paradigmNum: { firstItem.lexemeRec.paradigmNum }</div>
+                                        <div>accentParadigmNum: { firstItem.lexemeRec.accentParadigmNum }</div>
+                                        <div>userSessionNum: { firstItem.lexemeRec.userSessionNum }</div>
+                                        <div>ancode: { firstItem.lexemeRec.ancode } ({
+                                            (firstItem.lexemeRec.ancode)
+                                            ? rgramtab.ancodeAttrs(firstItem.lexemeRec.ancode).map((attr) => rgramtab.attrDesc(attr)).join(", ")
+                                            : ""
+                                        })</div>
+                                        <div>prefixParadigmNum: { firstItem.lexemeRec.prefixParadigmNum }</div>
+                                    <h3>Rules</h3>
                                     { rules }
                                 </div>
                             )

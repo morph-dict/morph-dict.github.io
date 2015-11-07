@@ -175,8 +175,31 @@ module.exports.search = function (toSearch) {
 
         // Group founded lexeme recs by paradigms and prefixes
         .then(function(data){
-             return Promise.resolve(_.values( _.groupBy(data, function(x){ return x.lexemeRec.paradigmNum } )));
-        }); 
+                var gropedByLexeme = _.values(_.groupBy(data, function (x) {
+                    return x.lexemeRec.paradigmNum
+                        + "," + x.lexemeRec.accentParadigmNum
+                        + "," + x.lexemeRec.ancode
+                        + "," + x.lexemeRec.basis
+                        + "," + x.lexemeRec.paradigmNum
+                        + "," + x.lexemeRec.prefixParadigmNum
+                        + "," + x.lexemeRec.userSessionNum
+                }));
+                var mergedGroups = gropedByLexeme.map(function(group){
+                    var first = group[0];
+                    return {
+                        matchedAncodes: group.map(function(item){return item.ancode}),
+                        lexemeRec: first.lexemeRec,
+                        prefix: first.prefix,
+                        paradigmRules: first.paradigmRules
+                    }
+                });
+                return Promise.resolve(mergedGroups);
+        })
+
+        .then(function(data){
+            //console.log(data);
+            return Promise.resolve(data);
+        });
             
         return promise;
     });
