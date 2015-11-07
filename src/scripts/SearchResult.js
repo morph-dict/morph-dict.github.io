@@ -22,7 +22,8 @@
 var React = require('react'),
     _ = require('underscore');
 
-var rgramtab = require('./rgramtab');
+var rgramtab = require('./rgramtab'),
+    RulesTables = require('./RulesTables');
 
 module.exports = React.createClass({
     render: function () {
@@ -44,37 +45,7 @@ module.exports = React.createClass({
                     <div><b>Результаты поиска</b></div>
                     {
                         this.props.search.result.map(function (firstItem, i) {
-                            var rules = (<div><h5> Rules </h5>
-                                <table>
-                                    <thead>
-                                    <tr>
-                                        <th>form</th>
-                                        <th>ancode</th>
-                                        <th>attrs</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {
-                                        firstItem.paradigmRules.map(function (rule) {
-                                            return <tr key={rule.prefix + "," + rule.ancode + "," + rule.ending}>
-                                                <td>
-                                                    <span style={{color:"red"}}>{firstItem.prefix}</span>
-                                                    <span style={{color:"green"}}>{rule.prefix}</span>
-                                                    {firstItem.lexemeRec.basis}
-                                                    <span style={{color:"blue"}}>{rule.ending}</span>
-                                                </td>
-                                                <td>{rule.ancode}</td>
-                                                <td>
-                                                    {
-                                                        rgramtab.ancodeAttrs(rule.ancode).map((attr) => rgramtab.attrDesc(attr)).join(", ")
-                                                    }
-                                                </td>
-                                            </tr>
-                                        })
-                                    }
-                                </tbody>
-                                </table>
-                            </div>);
+                            var rules = <RulesTables paradigmRules={firstItem.paradigmRules} lexemeRec={firstItem.lexemeRec} globalPrefix={firstItem.prefix}/>;
 
                             var key = firstItem.lexemeRec.basis
                             + "," + firstItem.lexemeRec.paradigmNum
