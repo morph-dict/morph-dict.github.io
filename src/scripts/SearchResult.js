@@ -1,3 +1,4 @@
+"use strict";
 /**
  * --------------------------------------------------------------------
  * Copyright 2015 Nikolay Mavrenkov
@@ -44,19 +45,19 @@ module.exports = React.createClass({
                 <div>
                     <div><b>Результаты поиска</b></div>
                     {
-                        this.props.search.result.map(function (firstItem, i) {
-                            var rules = <RulesTables paradigmRules={firstItem.paradigmRules} lexemeRec={firstItem.lexemeRec} globalPrefix={firstItem.prefix}/>;
+                        this.props.search.result.map((resultItem) => {
+                            var rules = <RulesTables paradigmRules={resultItem.paradigmRules} lexemeRec={resultItem.lexemeRec} globalPrefix={resultItem.prefix}/>;
 
-                            var key = firstItem.lexemeRec.basis
-                            + "," + firstItem.lexemeRec.paradigmNum
-                            + "," + firstItem.lexemeRec.accentParadigmNum
-                            + "," + firstItem.lexemeRec.userSessionNum
-                            + "," + firstItem.lexemeRec.ancode
-                            + "," + firstItem.lexemeRec.prefixParadigmNum;
+                            var key = resultItem.lexemeRec.basis
+                            + "," + resultItem.lexemeRec.paradigmNum
+                            + "," + resultItem.lexemeRec.accentParadigmNum
+                            + "," + resultItem.lexemeRec.userSessionNum
+                            + "," + resultItem.lexemeRec.ancode
+                            + "," + resultItem.lexemeRec.prefixParadigmNum;
 
 
-                            var commonAttrs = rgramtab.ancodeAttrs(firstItem.lexemeRec.ancode);
-                            var commonRulesAttrs = _.intersection.apply(null, firstItem.paradigmRules.map((rule) => rgramtab.ancodeAttrs(rule.ancode)));
+                            var commonAttrs = rgramtab.ancodeAttrs(resultItem.lexemeRec.ancode);
+                            var commonRulesAttrs = _.intersection.apply(null, resultItem.paradigmRules.map((rule) => rgramtab.ancodeAttrs(rule.ancode)));
 
                             commonAttrs = commonAttrs.concat(commonRulesAttrs);
 
@@ -64,7 +65,7 @@ module.exports = React.createClass({
                                 <div key={key}>
                                     <h1>Group</h1>
                                     <h3>Matched forms</h3>
-                                    { firstItem.matchedAncodes.map(function (ancode) {
+                                    { resultItem.matchedAncodes.map(function (ancode) {
                                         return (
                                             <div key={ancode}>
                                                 <h4>{
@@ -74,16 +75,16 @@ module.exports = React.createClass({
                                         )
                                     }) }
                                     <h3>Lexeme</h3>
-                                        <div>basis: { firstItem.lexemeRec.basis }</div>
-                                        <div>paradigmNum: { firstItem.lexemeRec.paradigmNum }</div>
-                                        <div>accentParadigmNum: { firstItem.lexemeRec.accentParadigmNum }</div>
-                                        <div>userSessionNum: { firstItem.lexemeRec.userSessionNum }</div>
-                                        <div>ancode: { firstItem.lexemeRec.ancode } ({
-                                            (firstItem.lexemeRec.ancode)
+                                        <div>basis: { resultItem.lexemeRec.basis }</div>
+                                        <div>paradigmNum: { resultItem.lexemeRec.paradigmNum }</div>
+                                        <div>accentParadigmNum: { resultItem.lexemeRec.accentParadigmNum }</div>
+                                        <div>userSessionNum: { resultItem.lexemeRec.userSessionNum }</div>
+                                        <div>ancode: { resultItem.lexemeRec.ancode } ({
+                                            (resultItem.lexemeRec.ancode)
                                             ? commonAttrs.map((attr) => rgramtab.attrDesc(attr)).join(", ")
                                             : ""
                                         })</div>
-                                        <div>prefixParadigmNum: { firstItem.lexemeRec.prefixParadigmNum }</div>
+                                        <div>prefixParadigmNum: { resultItem.lexemeRec.prefixParadigmNum }</div>
                                     <h3>Rules</h3>
                                     { rules }
                                 </div>

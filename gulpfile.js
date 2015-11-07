@@ -103,7 +103,7 @@ gulp.task('debug_scripts', function(){
         fullPaths: true
     });
 
-    bundler = bundler.transform(reactify, {"es6": true});
+    bundler = bundler.transform(reactify);
 
     bundler = watchify(bundler);
 

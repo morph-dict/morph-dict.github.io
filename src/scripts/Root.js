@@ -1,3 +1,4 @@
+"use strict";
 /**
  * --------------------------------------------------------------------
  * Copyright 2015 Nikolay Mavrenkov
@@ -36,10 +37,10 @@ module.exports = React.createClass({
         }
     },
 
-    onChangeSearchText: function(e) {
+    onChangeSearchText: function (e) {
         this.setState(update(this.state, {
             search: {
-                text: {$set:e.target.value}
+                text: {$set: e.target.value}
             }
         }));
     },
@@ -49,43 +50,44 @@ module.exports = React.createClass({
         var toSearch = this.state.search.text;
         this.setState(update(this.state, {
             search: {
-                state: {$set:'searching'},
-                result: {$set:null}
+                state: {$set: 'searching'},
+                result: {$set: null}
             }
         }));
 
-        dataAccess.search(toSearch).then(function (result) {
+        dataAccess.search(toSearch).then((result) => {
             this.setState(update(this.state, {
                 search: {
-                    state: {$set:'done'},
-                    result: {$set:result}
+                    state: {$set: 'done'},
+                    result: {$set: result}
                 }
             }));
-        }.bind(this)).catch(function (e) {
-            if(e.status === "not_found") {
+        }).catch((e) => {
+            if (e.status === "not_found") {
                 this.setState(update(this.state, {
                     search: {
-                        state: {$set:'not_found'},
-                        result: {$set:null}
+                        state: {$set: 'not_found'},
+                        result: {$set: null}
                     }
                 }))
             }
             else {
                 throw e;
             }
-        }.bind(this));
+        });
     },
 
-    render: function() {
+    render: function () {
 
         //<!-- псевдоабдоминальный - word with prefix -->
         //<!-- ленина, пошла -->
         return <form id="search" onSubmit={this.onStartSearch}>
-                <p>
-                    <label>Word form: <input type="text" id="word" value={this.state.search.text} onChange={this.onChangeSearchText}/></label>
-                    <button type="submit" >Search</button>
-                </p>
-                <SearchResult search={this.state.search}/>
-               </form>;
+            <p>
+                <label>Word form: <input type="text" id="word" value={this.state.search.text}
+                                         onChange={this.onChangeSearchText}/></label>
+                <button type="submit">Search</button>
+            </p>
+            <SearchResult search={this.state.search}/>
+        </form>;
     }
 });

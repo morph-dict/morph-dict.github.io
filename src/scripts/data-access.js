@@ -23,13 +23,13 @@ var $ = require('jquery'),  //todo: use http-js instead of jquery to make http c
     _ = require('underscore');
 
 function jqPromise(def) {
-    return new Promise(function (done, fail) {
+    return new Promise((done, fail) => {
         def.done(done).fail(fail);
     })
 }
 
 function indexResolver(perFile) {
-    return function (index) {
+    return (index) => {
         return {
             base: Math.floor(index / perFile),
             offset: index % perFile
@@ -45,7 +45,7 @@ module.exports.search = function (toSearch) {
     var dataRoot = "data";
 
 
-    return jqPromise($.ajax(dataRoot + "/index.json")).then(function (indexFile) {
+    return jqPromise($.ajax(dataRoot + "/index.json")).then((indexFile) => {
 
         var treeDir = dataRoot + "/" + indexFile.treeDir;
         var dictLexDir = dataRoot + "/" + indexFile.dictLexDir;
@@ -73,7 +73,7 @@ module.exports.search = function (toSearch) {
                     });
                 }
 
-                promise.then(function (data) {
+                promise.then((data) => {
                     var next = data[nextNodeIndex.offset];
                     if (rest.length == 0) {
                         if (next[1]) {
@@ -93,7 +93,7 @@ module.exports.search = function (toSearch) {
                             fail({status: "not_found", data: toSearch});
                         }
                     }
-                }).catch(function (e) {
+                }).catch((e) => {
                     fail(e);
                 })
             }
@@ -102,18 +102,18 @@ module.exports.search = function (toSearch) {
         })
 
         // Make it looks better
-        .then(function (data) {
-            return data.map(function (x) {
-                return {
+        .then((data) =>
+             data.map((x) => (
+                {
                     ancode: x[0],
                     lexemeRec: x[1]
                 }
-            });
-        })
+             ))
+        )
 
         // Fetch lexeme rec
-        .then(function (data) {
-            return Promise.all(data.map(function (node) {
+        .then((data) => {
+            return Promise.all(data.map((node) => {
                 var index = indexResolver(indexFile.dictLexItemsPerFile);
                 var idx = index(node.lexemeRec);
                 var fileName = dictLexDir + "/" + idx.base + ".json";
@@ -134,8 +134,8 @@ module.exports.search = function (toSearch) {
         })
 
         // Fetch prefix
-        .then(function (data) {
-            return Promise.all(data.map(function (node) {
+        .then((data) => {
+            return Promise.all(data.map((node) => {
                 if (node.lexemeRec.prefixParadigmNum !== null) {
                     var index = indexResolver(indexFile.dictPrefixItemsPerFile);
                     var idx = index(node.lexemeRec.prefixParadigmNum);
@@ -155,20 +155,20 @@ module.exports.search = function (toSearch) {
 
 
         // Fetch paradigms
-        .then(function (data) {
-            return Promise.all(data.map(function (node) {
+        .then((data) => {
+            return Promise.all(data.map((node) => {
                 var index = indexResolver(indexFile.dictParadigmItemsPerFile);
                 var idx = index(node.lexemeRec.paradigmNum);
                 var fileName = dictParadigmDir + "/" + idx.base + ".json";
-                return jqPromise($.ajax(fileName)).then(function (paradigmRulesFile) {
+                return jqPromise($.ajax(fileName)).then((paradigmRulesFile) => {
                     var paradigmRules = paradigmRulesFile[idx.offset];
-                    paradigmRules = paradigmRules.map(function (rule) {
-                        return {
+                    paradigmRules = paradigmRules.map((rule) => (
+                        {
                             ending: rule[0],
                             ancode: rule[1],
                             prefix: rule[2]
                         }
-                    });
+                    ));
                     return $.extend(node, {
                         paradigmRules: paradigmRules
                     })
@@ -177,20 +177,20 @@ module.exports.search = function (toSearch) {
         })
 
         // Group founded lexeme recs by paradigms and prefixes
-        .then(function(data){
-                var gropedByLexeme = _.values(_.groupBy(data, function (x) {
-                    return x.lexemeRec.paradigmNum
+        .then((data) => {
+                var gropedByLexeme = _.values(_.groupBy(data, (x) => (
+                    x.lexemeRec.paradigmNum
                         + "," + x.lexemeRec.accentParadigmNum
                         + "," + x.lexemeRec.ancode
                         + "," + x.lexemeRec.basis
                         + "," + x.lexemeRec.paradigmNum
                         + "," + x.lexemeRec.prefixParadigmNum
                         + "," + x.lexemeRec.userSessionNum
-                }));
-                var mergedGroups = gropedByLexeme.map(function(group){
+                )));
+                var mergedGroups = gropedByLexeme.map((group) => {
                     var first = group[0];
                     return {
-                        matchedAncodes: group.map(function(item){return item.ancode}),
+                        matchedAncodes: group.map((item) => item.ancode),
                         lexemeRec: first.lexemeRec,
                         prefix: first.prefix,
                         paradigmRules: first.paradigmRules
@@ -199,7 +199,7 @@ module.exports.search = function (toSearch) {
                 return Promise.resolve(mergedGroups);
         })
 
-        .then(function(data){
+        .then((data) => {
             //console.log(data);
             return Promise.resolve(data);
         });
