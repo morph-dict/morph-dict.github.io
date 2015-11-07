@@ -29,7 +29,9 @@ var gulp = require('gulp'),
     watchify = require('watchify'),
     fs = require('fs'),
     streamify = require('gulp-streamify'),
-    uglify = require('gulp-uglify');
+    uglify = require('gulp-uglify'),
+    anybar = require('anybar');
+
 
 
 var DEBUG_ROOT = './debug';
@@ -107,21 +109,28 @@ gulp.task('debug_scripts', function(){
 
     bundler = watchify(bundler);
 
+    function onError() {
+        anybar('red');
+        gutil.log.apply(this, arguments);
+    }
+
     function rebundle() {
         var bundle = bundler.bundle()
-            .on('error',  gutil.log)
+            .on('error',  onError)
             .pipe(source('app.js'))
-            .on('error', gutil.log)
+            .on('error', onError)
             .pipe(gulp.dest(DEBUG_ROOT + '/scripts'))
-            .on('error', gutil.log);
+            .on('error', onError);
         return bundle
     }
 
     bundler.on('update', function() {
+        anybar('yellow');
         var start = Date.now();
         gutil.log('Rebundle...');
         var bundle = rebundle();
         bundle.on('end', function(){
+            anybar('green');
             gutil.log("Done! Time: " + (Date.now() - start));
         });
     });
