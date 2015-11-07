@@ -45,12 +45,12 @@ module.exports = React.createClass({
                 <div>
                     <div><b>Результаты поиска</b></div>
                     {
-                        this.props.search.result.map(function (group) {
+                        this.props.search.result.map(function (group, i) {
                             var groupItemsHeader = group.map(function (item) {
                                 return (
                                     <div key={item.ancode}>
                                         <h4>Desc: { rgramtab.ancodeAttrs(item.ancode).map((attr) => {
-                                            return <span> { rgramtab.attrDesc(attr) }</span>
+                                            return <span key={attr}> { rgramtab.attrDesc(attr) }</span>
                                         }) }</h4>
                                         <h5>Lexeme rec</h5>
 
@@ -69,7 +69,7 @@ module.exports = React.createClass({
                                 )
                             });
 
-                            var item = group[0];
+                            var firstItem = group[0];
 
                             var rules = (<div><h5> Rules </h5>
                                 <table>
@@ -81,12 +81,12 @@ module.exports = React.createClass({
                                     </thead>
                                     <tbody>
                                     {
-                                        item.paradigmRules.map(function (rule) {
+                                        firstItem.paradigmRules.map(function (rule) {
                                             return <tr key={rule.prefix + "," + rule.ancode + "," + rule.ending}>
                                                 <td>
-                                                    <span style={{color:"red"}}>{item.prefix}</span>
+                                                    <span style={{color:"red"}}>{firstItem.prefix}</span>
                                                     <span style={{color:"green"}}>{rule.prefix}</span>
-                                                    {item.lexemeRec.basis}
+                                                    {firstItem.lexemeRec.basis}
                                                     <span style={{color:"blue"}}>{rule.ending}</span>
                                                 </td>
                                                 <td>{rule.ancode}</td>
@@ -97,8 +97,15 @@ module.exports = React.createClass({
                                 </table>
                             </div>);
 
+                            var key = firstItem.lexemeRec.basis
+                            + "," + firstItem.lexemeRec.paradigmNum
+                            + "," + firstItem.lexemeRec.accentParadigmNu
+                            + "," + firstItem.lexemeRec.userSessionNum
+                            + "," + firstItem.lexemeRec.ancod
+                            + "," + firstItem.lexemeRec.prefixParadigmNum;
+
                             return (
-                                <div>
+                                <div key={key}>
                                     <h1>Group</h1>
                                     { groupItemsHeader }
                                     <h1>Rules</h1>
