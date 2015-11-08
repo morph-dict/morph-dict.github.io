@@ -176,7 +176,7 @@ module.exports.search = function (toSearch) {
             }))
         })
 
-        // Group founded lexeme recs by paradigms and prefixes
+        // Group founded lexeme recs by lexems
         .then((data) => {
                 var gropedByLexeme = _.values(_.groupBy(data, (x) => (
                     x.lexemeRec.paradigmNum

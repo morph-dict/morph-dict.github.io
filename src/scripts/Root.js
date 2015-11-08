@@ -31,7 +31,7 @@ module.exports = React.createClass({
         return {
             search: {
                 state: 'waiting',
-                text: 'стол',
+                text: 'ленина',
                 result: {}
             }
         }

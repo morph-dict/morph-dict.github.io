@@ -1,1 +1,2 @@
 https://code.google.com/p/opencorpora/wiki/MRDFileFormat
+http://www.aot.ru/docs/rusmorph.html

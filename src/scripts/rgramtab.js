@@ -781,8 +781,13 @@ module.exports.attrDesc = function(attr){
         case "имя": return "имя";
         case "отч": return "отчество";
 
+        case "лок": return "топоним";
+        case "орг": return "организация";
+        case "дфст": return "обычно не имеет множественного числа";     // досааф
+
 
         // Verbs
+        case "безл": return "безличный";
         case "1л": return "первое лицо";
         case "2л": return "второе лицо";
         case "3л": return "третье лицо";
@@ -791,30 +796,37 @@ module.exports.attrDesc = function(attr){
         case "нст": return "настоящее время";
         case "буд": return "будущее время";
 
-        case "0": return "0";
-        case "2": return "2";
-        case "разг": return "разг";
-        case "арх": return "арх";
-        case "аббр": return "аббр";
-        case "сравн": return "сравн";
-        case "прев": return "прев";
-        case "безл": return "безл";
-        case "дст": return "дст";
-        case "пвл": return "пвл";
-        case "стр": return "стр";
-        case "вопр": return "вопр";
-        case "указат": return "указат";
-        case "лок": return "лок";
-        case "кач": return "кач";
-        case "дфст": return "дфст";
-        case "орг": return "орг";
-        case "св": return "св";
-        case "пе": return "пе";
-        case "нп": return "нп";
-        case "нс": return "нс";
-        case "жарг": return "жарг";
-        case "опч": return "опч";
-        case "притяж": return "притяж";
+        case "нс": return "несовершенный вид";
+        case "св": return "совершенный вид";
+
+        case "нп": return "непереходный";
+        case "пе": return "переходный";
+
+        case "дст": return "действительный залог"; //?
+        case "стр": return "страдательный залог";
+
+        case "пвл": return "повелительная форма";
+
+        //Adjectives
+        case "прев": return "превосходная степень";
+        case "сравн": return "сравнительная степень";
+        case "кач": return "качественное";
+
+        // Adverbs
+        case "указат": return "указательное";
+        case "вопр": return "вопросительное";
+
+        // Misc
+        case "разг": return "разговорное";  //?
+        case "арх": return "архаизм";
+        case "аббр": return "аббривиатура";
+        case "жарг": return "жаргонизм";
+        case "опч": return "частая опечатка или ошибка";
+
+        case "0": return "неизменяемое";
+        case "2": return "второй родительный или второй предложный падеж";
+        case "притяж": return "притяжательное";
+
         default: throw new Error("Unknown attribute: " + attr);
     }
 };

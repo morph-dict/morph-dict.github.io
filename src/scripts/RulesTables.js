@@ -21,10 +21,14 @@
  */
 
 var React = require('react'),
-    rgramtab = require('./rgramtab');
+    _ = require('underscore');
+
+var rgramtab = require('./rgramtab');
 
 module.exports = React.createClass({
     render: function(){
+        var commonAttrs = _.intersection(...this.props.paradigmRules.map((rule) => rgramtab.ancodeAttrs(rule.ancode)));
+
         return <div><h5> Rules </h5>
             <table>
                 <thead>
@@ -36,8 +40,9 @@ module.exports = React.createClass({
                 </thead>
                 <tbody>
                 {
-                    this.props.paradigmRules.map((rule) =>
-                        <tr key={rule.prefix + "," + rule.ancode + "," + rule.ending}>
+                    this.props.paradigmRules.map((rule) => {
+                        var uncommonAttrs = _.difference(rgramtab.ancodeAttrs(rule.ancode), commonAttrs);
+                        return <tr key={rule.prefix + "," + rule.ancode + "," + rule.ending}>
                             <td>
                                 <span style={{color:"red"}}>{this.props.globalPrefix}</span>
                                 <span style={{color:"green"}}>{rule.prefix}</span>
@@ -47,11 +52,12 @@ module.exports = React.createClass({
                             <td>{rule.ancode}</td>
                             <td>
                                 {
-                                    rgramtab.ancodeAttrs(rule.ancode).map((attr) => rgramtab.attrDesc(attr)).join(", ")
+
+                                    uncommonAttrs.map((attr) => rgramtab.attrDesc(attr)).join(", ")
                                 }
                             </td>
                         </tr>
-                    )
+                    })
                 }
                 </tbody>
             </table>
