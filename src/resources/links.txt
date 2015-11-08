@@ -1,2 +1,9 @@
+Описание форматов:
 https://code.google.com/p/opencorpora/wiki/MRDFileFormat
+
+Описание аттрибутов:
 http://www.aot.ru/docs/rusmorph.html
+
+Поиск по словарю:
+http://starling.rinet.ru/cgi-bin/query.cgi?basename=morpho%5Czaliznia%5Cdict&root=%2Fusr%2Flocal%2Fshare%2Fstarling%2Fmorpho&morpho=1&encoding=utf-rus
+http://jeck.ru/tools/SynonymsDictionary/

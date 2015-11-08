@@ -25,13 +25,15 @@ var React = require('react'),
 var SearchResult = require('./SearchResult'),
     dataAccess = require('./data-access');
 
-module.exports = React.createClass({
+const Root = React.createClass({
 
     getInitialState: function () {
+        //<!-- псевдоабдоминальный - word with prefix -->
+        //<!-- ленина, пошла -->
         return {
             search: {
                 state: 'waiting',
-                text: 'ленина',
+                text: 'пошлый',
                 result: {}
             }
         }
@@ -79,8 +81,7 @@ module.exports = React.createClass({
 
     render: function () {
 
-        //<!-- псевдоабдоминальный - word with prefix -->
-        //<!-- ленина, пошла -->
+
         return <form id="search" onSubmit={this.onStartSearch}>
             <p>
                 <label>Word form: <input type="text" id="word" value={this.state.search.text}
@@ -91,3 +92,4 @@ module.exports = React.createClass({
         </form>;
     }
 });
+module.exports = Root;

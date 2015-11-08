@@ -735,7 +735,7 @@ module.exports.attrDesc = function(attr){
 
         // Parts of speach
         case "С": return "существительное";
-        case "КР_ПРИЛ": return "краткое прилогательное";
+        case "КР_ПРИЛ": return "краткое прилагательное";
         case "ИНФИНИТИВ": return "инфинитив";
         case "ДЕЕПРИЧАСТИЕ": return "деепричастие";
         case "ПРИЧАСТИЕ": return "причастие";
@@ -828,5 +828,164 @@ module.exports.attrDesc = function(attr){
         case "притяж": return "притяжательное";
 
         default: throw new Error("Unknown attribute: " + attr);
+    }
+};
+
+
+const CATS = {
+    PART_OF_SPEACH: "part-of-speach",
+    ANIMACY: "animacy",
+    NUMBER: "number",
+    GENDER: "gender",
+    CASE: "case",
+    PERSON: "person",
+    TENSE: "tense",
+    ASPECT: "aspect",
+    VALENCY: "valency",
+    VOICE: "voice",
+    MOOD: "mood",
+    COMPARISON: "сomparison",
+    NO_CAT: "no-cat"
+};
+
+module.exports.CATS = CATS;
+
+module.exports.attrCat = function(attr) {
+    switch(attr) {
+        // Parts of speach
+        case "С":
+        case "КР_ПРИЛ":
+        case "ИНФИНИТИВ":
+        case "ДЕЕПРИЧАСТИЕ":
+        case "ПРИЧАСТИЕ":
+        case "КР_ПРИЧАСТИЕ":
+        case "МС-П":
+        case "МС-ПРЕДК":
+        case "ЧИСЛ":
+        case "ЧИСЛ-П":
+        case "ПРЕДК":
+        case "ПРЕДЛ":
+        case "ПОСЛ":
+        case "СОЮЗ":
+        case "МЕЖД":
+        case "ЧАСТ":
+        case "ВВОДН":
+        case "ФРАЗ":
+        case "П":
+        case "Г":
+        case "МС":
+        case "Н":
+            return CATS.PART_OF_SPEACH;
+
+// Nouns
+        case "од":
+        case "но": return CATS.ANIMACY; // Одушевленность
+
+        case "ед":
+        case "мн": return CATS.NUMBER;
+
+        case "мр":
+        case "жр":
+        case "ср":
+        case "мр-жр": return CATS.GENDER;
+
+        case "им":
+        case "рд":
+        case "дт":
+        case "вн":
+        case "тв":
+        case "пр":
+        case "2": //` "второй родительный или второй предложный падеж";
+        case "зв": return CATS.CASE;
+
+        //case "фам": return "фамилия";
+        //case "имя": return "имя";
+        //case "отч": return "отчество";
+        //
+        //case "лок": return "топоним";
+        //case "орг": return "организация";
+        //case "дфст": return "обычно не имеет множественного числа";     // досааф
+
+
+        // Verbs
+        case "1л":
+        case "2л":
+        case "3л": return CATS.PERSON;
+
+        case "прш":
+        case "нст":
+        case "буд": return CATS.TENSE;
+
+        case "нс":
+        case "св": return CATS.ASPECT;
+
+        case "безл":
+        case "нп":
+        case "пе": return CATS.VALENCY;
+
+        case "дст":
+        case "стр": return CATS.VOICE;
+
+        case "пвл": return CATS.MOOD;
+
+        //Adjectives
+        case "прев":
+        case "сравн": return CATS.COMPARISON;
+
+        //case "кач": return "качественное";
+
+        // Adverbs
+        //case "указат": return "указательное";
+        //case "вопр": return "вопросительное";
+
+        // Misc
+        //case "разг": return "разговорное";  //?
+        //case "арх": return "архаизм";
+        //case "аббр": return "аббривиатура";
+        //case "жарг": return "жаргонизм";
+        //case "опч": return "частая опечатка или ошибка";
+
+        //case "0": return "неизменяемое";
+        //case "притяж": return "притяжательное";
+
+        default:
+            return CATS.NO_CAT;
+    }
+};
+
+
+module.exports.catOrder = function(cat) {
+
+    switch (cat) {
+        case CATS.PART_OF_SPEACH: return 0;
+
+        case  CATS.ANIMACY: return 1;
+        case  CATS.NUMBER: return 1;
+
+        case  CATS.GENDER: return 1;
+        case  CATS.CASE: return 2;
+
+        case  CATS.PERSON: return 1;
+        case  CATS.TENSE: return 1;
+        case  CATS.ASPECT: return 1;
+        case  CATS.VALENCY: return 1;
+        case  CATS.VOICE: return 1;
+        case  CATS.MOOD: return 1;
+        case  CATS.COMPARISON: return 1;
+        case  CATS.NO_CAT: return Number.MAX_VALUE;
+        default: throw Error("Unknown category: " + cat);
+    }
+};
+
+module.exports.posScheme = function(pos) {
+    if(pos==="П" || pos==="КР_ПРИЛ") {
+        return {
+            tables: [CATS.NUMBER],
+            cols: [CATS.GENDER, CATS.ANIMACY],
+            rows: [CATS.CASE]
+        }
+    }
+    else {
+        throw new Error("Not implemented for: " + pos)
     }
 };

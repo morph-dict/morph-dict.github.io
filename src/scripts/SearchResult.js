@@ -26,7 +26,7 @@ var React = require('react'),
 var rgramtab = require('./rgramtab'),
     RulesTables = require('./RulesTables');
 
-module.exports = React.createClass({
+const SearchResult = React.createClass({
     render: function () {
         if (this.props.search.state === 'waiting') {
             return <div>Вы еще ничего не искали :(</div> // todo: use another text
@@ -46,14 +46,16 @@ module.exports = React.createClass({
                     <div><b>Результаты поиска</b></div>
                     {
                         this.props.search.result.map((resultItem) => {
-                            var rules = <RulesTables paradigmRules={resultItem.paradigmRules} lexemeRec={resultItem.lexemeRec} globalPrefix={resultItem.prefix}/>;
+                            var rules = <RulesTables paradigmRules={resultItem.paradigmRules}
+                                                     lexemeRec={resultItem.lexemeRec}
+                                                     globalPrefix={resultItem.prefix}/>;
 
                             var key = resultItem.lexemeRec.basis
-                            + "," + resultItem.lexemeRec.paradigmNum
-                            + "," + resultItem.lexemeRec.accentParadigmNum
-                            + "," + resultItem.lexemeRec.userSessionNum
-                            + "," + resultItem.lexemeRec.ancode
-                            + "," + resultItem.lexemeRec.prefixParadigmNum;
+                                + "," + resultItem.lexemeRec.paradigmNum
+                                + "," + resultItem.lexemeRec.accentParadigmNum
+                                + "," + resultItem.lexemeRec.userSessionNum
+                                + "," + resultItem.lexemeRec.ancode
+                                + "," + resultItem.lexemeRec.prefixParadigmNum;
 
 
                             var commonAttrs = resultItem.lexemeRec.ancode ? rgramtab.ancodeAttrs(resultItem.lexemeRec.ancode) : [];
@@ -64,32 +66,34 @@ module.exports = React.createClass({
                             return (
                                 <div key={key}>
                                     <h1>Group</h1>
+
                                     <h3>Matched forms</h3>
                                     { resultItem.matchedAncodes.map(function (ancode) {
                                         return (
                                             <div key={ancode}>
                                                 <h4>{
-                                                     rgramtab.ancodeAttrs(ancode).map((attr) => rgramtab.attrDesc(attr)).join(", ")
+                                                    rgramtab.ancodeAttrs(ancode).map((attr) => rgramtab.attrDesc(attr)).join(", ")
                                                 }</h4>
                                             </div>
                                         )
                                     }) }
                                     <h3>Lexeme</h3>
-                                        <div>basis: { resultItem.lexemeRec.basis }</div>
-                                        <div>paradigmNum: { resultItem.lexemeRec.paradigmNum }</div>
-                                        <div>accentParadigmNum: { resultItem.lexemeRec.accentParadigmNum }</div>
-                                        <div>userSessionNum: { resultItem.lexemeRec.userSessionNum }</div>
-                                        <div>ancode: { resultItem.lexemeRec.ancode } ({
-                                            (resultItem.lexemeRec.ancode)
+
+                                    <div>basis: { resultItem.lexemeRec.basis }</div>
+                                    <div>paradigmNum: { resultItem.lexemeRec.paradigmNum }</div>
+                                    <div>accentParadigmNum: { resultItem.lexemeRec.accentParadigmNum }</div>
+                                    <div>userSessionNum: { resultItem.lexemeRec.userSessionNum }</div>
+                                    <div>ancode: { resultItem.lexemeRec.ancode } ({
+                                        (resultItem.lexemeRec.ancode)
                                             ? commonAttrs.map((attr) => rgramtab.attrDesc(attr)).join(", ")
                                             : ""
-                                        })</div>
-                                        <div>prefixParadigmNum: { resultItem.lexemeRec.prefixParadigmNum }</div>
+                                    })
+                                    </div>
+                                    <div>prefixParadigmNum: { resultItem.lexemeRec.prefixParadigmNum }</div>
                                     <h3>Rules</h3>
                                     { rules }
                                 </div>
                             )
-
 
 
                         })
@@ -107,3 +111,4 @@ module.exports = React.createClass({
 
     }
 });
+module.exports = SearchResult;
