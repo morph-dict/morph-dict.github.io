@@ -116,18 +116,16 @@ const RulesTables = React.createClass({
                     .map((word) => word.attrs)
                     .value();
 
-                function aux(cats, before) {
-                    console.log("aux: " + JSON.stringify(cats));
+                function buildTree(cats, before) {
                     if (cats.length > 0) {
                         const nextCat = cats[0];
                         const found = _.chain(attrListList)
-                            .filter((attrList) => attrList.filter((attr) => rgramtab.attrCat(attr) === nextCat).length > 0)
+                            .filter((attrList) => attrList.filter((attr) => rgramtab.attrCat(attr) === nextCat).length > 0) // all lists, which contains attrs from current category
                             .filter((attrList) => _.every(before, (beforeAttr) => _.contains(attrList, beforeAttr))) // all lists, which contains all previous attrs
-                            .map((attrList) => attrList.filter((attr) => rgramtab.attrCat(attr) === nextCat))
-                            .reduce((acc, x) => _.union(acc, x))
+                            .map((attrList) => attrList.filter((attr) => rgramtab.attrCat(attr) === nextCat)) // leave only attrs from category
+                            .reduce((acc, x) => _.union(acc, x)) // make single array
                             .value();
                         const restCats = _.rest(cats);
-                        console.log("restCats: " + JSON.stringify(restCats));
                         if(restCats.length == 0) {
                             return found;
                         }
@@ -135,7 +133,7 @@ const RulesTables = React.createClass({
                             var result = {};
                             for (var i = 0; i < found.length; i++) {
                                 var attr = found[i];
-                                result[attr] = aux(restCats, before.concat([attr]))
+                                result[attr] = buildTree(restCats, before.concat([attr]))
                             }
                             return result;
                         }
@@ -145,23 +143,97 @@ const RulesTables = React.createClass({
                     }
                 }
 
-                console.log(aux(colCats, []));
-
-
-            
-                var tmp = [];
-                var lastFilter = null;
-                for (var i = 0; i < colCats.length; i++) {
-                    var colCat = colCats[i];
-                    const filteredListList = attrListList.filter((attrList) => attrList.filter((attr) => rgramtab.attrCat(attr) === colCat).length > 0); // only lists of current cat
-                    const catAttrs = _.chain(filteredListList)
-                        .map((attrList) => attrList.filter((attr) => rgramtab.attrCat(attr) === colCat))
-                        .reduce((acc, x) => _.union(acc, x))
-                        .value();
-                    tmp.push(catAttrs);
-
+                function treeSize(tree) {
+                    if(tree.constructor === Array) {
+                        return tree.length;
+                    }
+                    else {
+                        return _.chain(tree)
+                            .values()
+                            .reduce((acc, subTree) => acc + treeSize(subTree), 0)
+                    }
                 }
 
+                //function render(trees, result) {
+                //
+                //    var row = <tr key={ colCats[result.length] }>
+                //                <th>OPA</th>
+                //                {
+                //                _.chain(trees)
+                //                .map((tree) => (
+                //                    _.chain(tree).keys().map((key) => (
+                //                        <th colSpan={ treeSize(tree) }>{ key }</th>
+                //                    ))))
+                //                .reduce((acc,x) => _.union(acc,x), [])
+                //                .value()
+                //              }</tr>;
+                //    result.push(row);
+                //}
+                function render(trees, result, deep) {
+                    var row;
+                    if(deep==0) {
+                        row = <tr>
+                            {
+                                _.chain(trees)
+                                    .map((tree) => _.keys(tree))
+                                    .reduce((acc,x) => acc.concat(x), [])
+                                    .map((key) => <th>{ key }</th>)
+                                    .value()
+                            }
+                        </tr>;
+                    }
+                    else {
+                        row = <tr>
+                            {
+                                _.chain(trees)
+                                    .map((tree) => _.values(tree))
+                                    .reduce((acc,x) => acc.concat(x), [])
+                                    .map((key) => <th>{ key }</th>)
+                                    .value()
+                            }
+                        </tr>;
+                    }
+                    result.push(row);
+                    if(deep>0) {
+                        var subtrees = _.chain(trees).map((tree) => _.values(tree)).reduce((acc,x) => acc.concat(x), []);
+                        render(subtrees, result, deep-1)
+                    }
+                }
+
+
+                var a = {
+                    "мр": {
+                        "од": {
+                            "ед":[
+                                "ип",
+                                "рп"
+                            ],
+                            "мн":[
+                                "ип",
+                                "рп"
+                            ]
+                        },
+                        "но": {
+                            "ед":["ип","рп"]
+                        }
+                    },
+                    "жр": {
+                        "од": {
+                            "ед":["ип","рп"]
+                        },
+                        "но": {
+                            "ед":["ип","рп"]
+                        }
+                    }
+                };
+
+                const tmp2 = [];
+                render([a], tmp2, 3);
+                console.log(tmp2);
+
+                return tmp2;
+
+                /*const tmp = buildTree(colCats, []);
                 //console.log(tmp);
 
 
@@ -173,9 +245,9 @@ const RulesTables = React.createClass({
                                                     .reduce((acc, x) => _.union(acc,x), [])
                                                     .filter((attr) => rgramtab.attrCat(attr) == cat)
                                                     .value());
-                                                    
-                                                    
-                                                    
+
+
+
 
                 var result = [];
                 var last = null;
@@ -193,7 +265,7 @@ const RulesTables = React.createClass({
                     last = row;
                     result.push(row);
                 }
-                     
+
 
                 return result.map((row, i) => (
                     <tr key={i}>
@@ -201,7 +273,7 @@ const RulesTables = React.createClass({
                         row.map((col, j) => <th key={i + "," + j}>{ col }</th>)
                     }
                     </tr>
-                ));
+                ));*/
             }
 
             return <div key={pos}>
