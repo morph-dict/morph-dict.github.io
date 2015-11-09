@@ -23,7 +23,8 @@
 var React = require('react'),
     _ = require('underscore');
 
-var rgramtab = require('./rgramtab');
+var rgramtab = require('./rgramtab'),
+    attrTree = require('./attrTree');
 
 _.mixin({
     groupMulty: function(array, f) {
@@ -86,92 +87,16 @@ const RulesTables = React.createClass({
             const posWords = words.filter((form) => attrByCat(form, rgramtab.CATS.PART_OF_SPEACH)[0] === pos); //todo: bad
             const renderScheme = rgramtab.posScheme(pos);
 
-            var tablesCat = renderScheme.tables[0]; // todo: support multiple tables
-            var colsCat1 = renderScheme.cols[0];
-            var colsCat2 = renderScheme.cols[1];
 
-            var groupByCat = _.chain(posWords)
-                .filter((word) => word.attrs.filter((attr) => rgramtab.attrCat(attr) === tablesCat).length > 0)
-                .groupMulty((word) => attrByCat(word, tablesCat))
-                .value();
+            function renderHeader(tree) {
 
-            const grouped = _.chain(groupByCat).mapObject((words) => (
-                _.chain(words)
-                    .filter((word) => word.attrs.filter((attr) => rgramtab.attrCat(attr) === colsCat1).length > 0)
-                    .groupMulty((word) => attrByCat(word, colsCat1))
-                    .mapObject((words) => (
-                        _.chain(words)
-                            .filter((word) => word.attrs.filter((attr) => rgramtab.attrCat(attr) === colsCat2).length > 0)
-                            .groupMulty((word) => attrByCat(word, colsCat2))
-                            .value()
-                    ))
-                    .value()
-            )).value();
+                function renderTree(trees, deep) {
+                    var result = [];
 
-            //console.log(grouped);
-
-
-            function renderHeader(colCats) {
-                var attrListList = _.chain(posWords)
-                    .map((word) => word.attrs)
-                    .value();
-
-                function buildTree(cats, before) {
-                    if (cats.length > 0) {
-                        const nextCat = cats[0];
-                        const found = _.chain(attrListList)
-                            .filter((attrList) => attrList.filter((attr) => rgramtab.attrCat(attr) === nextCat).length > 0) // all lists, which contains attrs from current category
-                            .filter((attrList) => _.every(before, (beforeAttr) => _.contains(attrList, beforeAttr))) // all lists, which contains all previous attrs
-                            .map((attrList) => attrList.filter((attr) => rgramtab.attrCat(attr) === nextCat)) // leave only attrs from category
-                            .reduce((acc, x) => _.union(acc, x)) // make single array
-                            .value();
-                        const restCats = _.rest(cats);
-                        if(restCats.length == 0) {
-                            return found.map((attr) => before.concat([attr]).join(":"));
-                        }
-                        else {
-                            var result = {};
-                            for (var i = 0; i < found.length; i++) {
-                                var attr = found[i];
-                                result[before.concat([attr]).join(":")] = buildTree(restCats, before.concat([attr]))
-                            }
-                            return result;
-                        }
-                    }
-                    else {
-                        throw new Error("Shouldn't ever happens!");
-                    }
-                }
-
-                function treeSize(tree) {
-                    if(tree.constructor === Array) {
-                        return tree.length;
-                    }
-                    else {
-                        return _.chain(tree)
-                            .values()
-                            .reduce((acc, subTree) => acc + treeSize(subTree), 0)
-                    }
-                }
-
-                function treeDeep(tree) {
-                    if(tree.constructor === Array) {
-                        return 0;
-                    }
-                    else {
-                        var deeps = _.chain(tree)
-                            .values()
-                            .map((tree) => treeDeep(tree) + 1)
-                            .value();
-                        return Math.max(...deeps);
-                    }
-                }
-
-                function renderTree(trees, result, deep) {
                     var row;
                     if(deep!=0) {
                         var keys = _.chain(trees)
-                            .map((tree) => _.keys(tree).map((key) => ({key: key, size: treeSize(tree[key])})))
+                            .map((tree) => _.keys(tree).map((key) => ({key: key, size: attrTree.size(tree[key])})))
                             .reduce((acc, x) => acc.concat(x), [])
                             .value();
                         row = <tr key={ keys.map((key) => key.key).join(",") }>
@@ -198,80 +123,69 @@ const RulesTables = React.createClass({
                     result.push(row);
                     if(deep>0) {
                         var subtrees = _.chain(trees).map((tree) => _.values(tree)).reduce((acc,x) => acc.concat(x), []);
-                        renderTree(subtrees, result, deep-1)
+                        result = result.concat(renderTree(subtrees, deep-1))
+                    }
+
+                    return result;
+                }
+
+                return renderTree([tree], attrTree.deep(tree));
+            }
+
+            function renderBody(tree) {
+
+
+                function aux(tree) {
+                    if(tree.constructor === Array) {
+                        return tree.map((x) => <td key={x}>{x}</td>)
+                    }
+                    else {
+                        return _.chain(tree)
+                            .values()
+                            .map((subtree) => aux(subtree))
+                            .reduce((aux, x) => aux.concat([x]), [])
+                            .value()
                     }
                 }
 
-
-                var a = {
-                    "мр": {
-                        "мр:од": {
-                            "мр:од:ед":[
-                                "мр:од:ед:ип",
-                                "мр:од:ед:рп"
-                            ],
-                            "мр:од:мн":[
-                                "мр:од:мн:ип",
-                                "мр:од:мн:рп"
-                            ]
-                        },
-                        "мр:но": {
-                            "мр:но:ед":[
-                                "мр:но:ед:ип",
-                                "мр:но:ед:рп"
-                            ]
-                        }
-                    },
-                    "жр": {
-                        "жр:од": {
-                            "жр:од:ед":[
-                                "жр:од:ед:ип",
-                                "жр:од:ед:рп"
-                            ]
-                        },
-                        "жр:но": {
-                            "жр:но:ед":[
-                                "жр:но:ед:ип",
-                                "жр:но:ед:рп"
-                            ]
-                        }
+                return <tr>
+                    {
+                        aux(tree)
                     }
-                };
-
-                const tree = buildTree(colCats, []);
-                //const tree = a;
-
-                console.log(treeDeep(tree));
-
-                const result = [];
-                renderTree([tree], result, treeDeep(tree));
-                console.log(result);
-
-                return result;
+                </tr>;
             }
 
             return <div key={pos}>
                 <h1>{rgramtab.attrDesc(pos)}</h1>
                 {
-                    renderScheme.tables.map((tableCat) => (
-                        _.chain(posWords)
+                    renderScheme.tables.map((tableCat) => {
+                        var headerTree = attrTree.build(posWords, renderScheme.cols);
+
+
+                        return _.chain(posWords)
                             .map((word) => word.attrs)
-                            .reduce((acc, x) => _.union(acc,x), [])
+                            .reduce((acc, x) => _.union(acc, x), [])
                             .filter((attr) => rgramtab.attrCat(attr) == tableCat)
                             .map((attr) => (
                                 <div>
                                     <h2>{ attr }</h2>
                                     <table>
                                         <thead>
-                                            {
-                                                renderHeader(renderScheme.cols)
-                                            }
+                                        {
+                                            renderHeader(headerTree)
+                                        }
                                         </thead>
+                                        <tbody>
+                                        {
+                                            renderBody(headerTree)
+                                        }
+                                        </tbody>
                                     </table>
+
                                 </div>
                             ))
                             .value()
-                    ))
+                    })
                 }
             </div>
 
