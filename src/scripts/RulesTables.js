@@ -127,13 +127,13 @@ const RulesTables = React.createClass({
                             .value();
                         const restCats = _.rest(cats);
                         if(restCats.length == 0) {
-                            return found;
+                            return found.map((attr) => before.concat([attr]).join(":"));
                         }
                         else {
                             var result = {};
                             for (var i = 0; i < found.length; i++) {
                                 var attr = found[i];
-                                result[attr] = buildTree(restCats, before.concat([attr]))
+                                result[before.concat([attr]).join(":")] = buildTree(restCats, before.concat([attr]))
                             }
                             return result;
                         }
@@ -154,41 +154,43 @@ const RulesTables = React.createClass({
                     }
                 }
 
-                //function render(trees, result) {
-                //
-                //    var row = <tr key={ colCats[result.length] }>
-                //                <th>OPA</th>
-                //                {
-                //                _.chain(trees)
-                //                .map((tree) => (
-                //                    _.chain(tree).keys().map((key) => (
-                //                        <th colSpan={ treeSize(tree) }>{ key }</th>
-                //                    ))))
-                //                .reduce((acc,x) => _.union(acc,x), [])
-                //                .value()
-                //              }</tr>;
-                //    result.push(row);
-                //}
-                function render(trees, result, deep) {
+                function treeDeep(tree) {
+                    if(tree.constructor === Array) {
+                        return 0;
+                    }
+                    else {
+                        var deeps = _.chain(tree)
+                            .values()
+                            .map((tree) => treeDeep(tree) + 1)
+                            .value();
+                        return Math.max(...deeps);
+                    }
+                }
+
+                function renderTree(trees, result, deep) {
                     var row;
-                    if(deep==0) {
-                        row = <tr>
+                    if(deep!=0) {
+                        var keys = _.chain(trees)
+                            .map((tree) => _.keys(tree).map((key) => ({key: key, size: treeSize(tree[key])})))
+                            .reduce((acc, x) => acc.concat(x), [])
+                            .value();
+                        row = <tr key={ keys.map((key) => key.key).join(",") }>
                             {
-                                _.chain(trees)
-                                    .map((tree) => _.keys(tree))
-                                    .reduce((acc,x) => acc.concat(x), [])
-                                    .map((key) => <th>{ key }</th>)
+                                    _.chain(keys)
+                                    .map((x) => <th  key={x.key} colSpan={x.size}>{ _.last(x.key.split(":")) }</th>)
                                     .value()
                             }
                         </tr>;
                     }
                     else {
-                        row = <tr>
+                        var keys = _.chain(trees)
+                            .map((tree) => _.values(tree))
+                            .reduce((acc,x) => acc.concat(x), [])
+                            .value();
+                        row = <tr key={ keys.map((key) => key.key).join(",") }>
                             {
-                                _.chain(trees)
-                                    .map((tree) => _.values(tree))
-                                    .reduce((acc,x) => acc.concat(x), [])
-                                    .map((key) => <th>{ key }</th>)
+                                    _.chain(keys)
+                                    .map((key) => <th key={key}>{ _.last(key.split(":")) }</th>)
                                     .value()
                             }
                         </tr>;
@@ -196,84 +198,56 @@ const RulesTables = React.createClass({
                     result.push(row);
                     if(deep>0) {
                         var subtrees = _.chain(trees).map((tree) => _.values(tree)).reduce((acc,x) => acc.concat(x), []);
-                        render(subtrees, result, deep-1)
+                        renderTree(subtrees, result, deep-1)
                     }
                 }
 
 
                 var a = {
                     "мр": {
-                        "од": {
-                            "ед":[
-                                "ип",
-                                "рп"
+                        "мр:од": {
+                            "мр:од:ед":[
+                                "мр:од:ед:ип",
+                                "мр:од:ед:рп"
                             ],
-                            "мн":[
-                                "ип",
-                                "рп"
+                            "мр:од:мн":[
+                                "мр:од:мн:ип",
+                                "мр:од:мн:рп"
                             ]
                         },
-                        "но": {
-                            "ед":["ип","рп"]
+                        "мр:но": {
+                            "мр:но:ед":[
+                                "мр:но:ед:ип",
+                                "мр:но:ед:рп"
+                            ]
                         }
                     },
                     "жр": {
-                        "од": {
-                            "ед":["ип","рп"]
+                        "жр:од": {
+                            "жр:од:ед":[
+                                "жр:од:ед:ип",
+                                "жр:од:ед:рп"
+                            ]
                         },
-                        "но": {
-                            "ед":["ип","рп"]
+                        "жр:но": {
+                            "жр:но:ед":[
+                                "жр:но:ед:ип",
+                                "жр:но:ед:рп"
+                            ]
                         }
                     }
                 };
 
-                const tmp2 = [];
-                render([a], tmp2, 3);
-                console.log(tmp2);
+                const tree = buildTree(colCats, []);
+                //const tree = a;
 
-                return tmp2;
+                console.log(treeDeep(tree));
 
-                /*const tmp = buildTree(colCats, []);
-                //console.log(tmp);
+                const result = [];
+                renderTree([tree], result, treeDeep(tree));
+                console.log(result);
 
-
-
-
-
-                colCats = colCats.map((cat) => _.chain(posWords)
-                                                    .map((word) => word.attrs)
-                                                    .reduce((acc, x) => _.union(acc,x), [])
-                                                    .filter((attr) => rgramtab.attrCat(attr) == cat)
-                                                    .value());
-
-
-
-
-                var result = [];
-                var last = null;
-
-                for (var i = 0; i < colCats.length; i++) {
-                    var colCat = colCats[i];
-                    var row = [];
-                    const repeat = last ? last.length : 1;
-                    for(var k = 0; k < repeat; k++) {
-                        for (var j = 0; j < colCat.length; j++) {
-                            var attr = colCat[j];
-                            row.push(attr);
-                        }
-                    }
-                    last = row;
-                    result.push(row);
-                }
-
-
-                return result.map((row, i) => (
-                    <tr key={i}>
-                    {
-                        row.map((col, j) => <th key={i + "," + j}>{ col }</th>)
-                    }
-                    </tr>
-                ));*/
+                return result;
             }
 
             return <div key={pos}>
