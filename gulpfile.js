@@ -21,6 +21,7 @@
 
 var gulp = require('gulp'),
     gutil = require('gulp-util'),
+    sass = require('gulp-sass'),
     watch = require('gulp-watch'),
     symlink = require('gulp-watch'),
     browserify = require('browserify'),
@@ -66,7 +67,14 @@ gulp.task('scripts', function(){
         .on('error', gutil.log)
 });
 
-gulp.task('default', ['html', 'scripts']);
+gulp.task('styles', function(){
+    var files = SRC_ROOT + '/styles/**.scss';
+    return gulp.src(files)
+        .pipe(sass().on('error', sass.logError))
+        .pipe(gulp.dest(PROD_ROOT + '/styles'))
+});
+
+gulp.task('default', ['html', 'scripts', 'styles']);
 
 
 //***************** Debug *****************
@@ -138,6 +146,18 @@ gulp.task('debug_scripts', function(){
     return rebundle();
 });
 
-gulp.task('debug', ['debug_data', 'debug_html', 'debug_scripts']);
+gulp.task('_debug_styles', function(){
+    var files = SRC_ROOT + '/styles/**.scss';
+    gulp.src(files)
+        .pipe(sass().on('error', sass.logError))
+        .pipe(gulp.dest(DEBUG_ROOT + '/styles'))
+});
+
+gulp.task('debug_styles', ['_debug_styles'], function(){
+    var files = SRC_ROOT + '/styles/**.scss';
+    gulp.watch(files, ['_debug_styles']);
+});
+
+gulp.task('debug', ['debug_data', 'debug_html', 'debug_scripts', 'debug_styles']);
 
 
