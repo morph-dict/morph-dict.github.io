@@ -735,7 +735,7 @@ module.exports.attrDesc = function(attr){
 
         // Parts of speach
         case "С": return "существительное";
-        case "КР_ПРИЛ": return "краткое прилогательное";
+        case "КР_ПРИЛ": return "краткое прилагательное";
         case "ИНФИНИТИВ": return "инфинитив";
         case "ДЕЕПРИЧАСТИЕ": return "деепричастие";
         case "ПРИЧАСТИЕ": return "причастие";
