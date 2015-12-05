@@ -13,7 +13,7 @@ module.exports = React.createClass({
 
     render: function () {
 
-        return <form id="search" onSubmit={this.props.onStartSearch}>
+        return <form id="search" onSubmit={this.props.onStartSearch} className="search-form">
             <p>
                 <label>Введите словоформу: <input type="text" id="word" value={this.props.searchText}
                                                   onChange={this.props.onChangeSearchText}/></label>

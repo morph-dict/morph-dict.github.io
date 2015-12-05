@@ -1,18 +1,54 @@
+/* Global properties */
 html {
-  font-size: 10pt;
+  font-size: 12pt;
+  font-family: 'PT Serif', 'Georgia', serif;
 }
 
+@mixin top-level-text {
+  text-align: center;
+}
+
+table {
+  margin: 0 auto;
+}
+
+/* components */
 .header {
-  font-size: 2rem;
+  @include top-level-text;
+  font-size: 1.75rem;
+  margin: 3rem 0;
 }
 
-.search-results {
+.search-result-list {
+  &__header {
+    text-align: center;
+  }
+  &__message {
+    text-align: center;
+  }
   &__group {
     border: 1px solid black;
     margin: 0 0 1em 0;
+
+    &__header {
+      text-align: center;
+    }
   }
 }
 
-.matched * {
-  font-weight: bold;
+.rules-table {
+  &__header {
+    text-align: center;
+  }
+  &__word-form-row {
+    &--matched * {
+      font-weight: bold;
+    }
+  }
+}
+
+
+
+.search-form {
+  @include top-level-text;
 }

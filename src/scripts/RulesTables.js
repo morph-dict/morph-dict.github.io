@@ -29,15 +29,17 @@ module.exports = React.createClass({
     render: function(){
         var commonAttrs = _.intersection(...this.props.paradigmRuleList.map((rule) => rgramtab.ancodeAttrs(rule.ancode)));
 
-        return <div><h5>Словоформы:</h5>
+        return <div className="rules-table">
+            <h5 className="rules-table__header">Словоформы:</h5>
             <table>
                 <tbody>
                 {
                     this.props.paradigmRuleList.map((rule) => {
                         var matched = this.props.matchedAncodeList.indexOf(rule.ancode) != -1;
                         var uncommonAttrs = _.difference(rgramtab.ancodeAttrs(rule.ancode), commonAttrs);
-                        var classNameList = matched ? ["matched"] : [];
-                        return <tr key={rule.prefix + "," + rule.ancode + "," + rule.ending} className={classNameList}>
+                        var classNameList = ['rules-table__word-form-row'];
+                        classNameList = classNameList.concat(matched ? ['rules-table__word-form-row--matched'] : []);
+                        return <tr key={rule.prefix + "," + rule.ancode + "," + rule.ending} className={classNameList.join(' ')}>
                             <td>
                                 <span style={{color:"red"}}>{this.props.globalPrefix}</span>
                                 <span style={{color:"green"}}>{rule.prefix}</span>

@@ -23,7 +23,7 @@ var React = require('react'),
     update = require('react-addons-update');
 
 var SearchForm = require('./SearchForm'),
-    SearchResult = require('./SearchResult'),
+    SearchResultList = require('./SearchResultList'),
     dataAccess = require('./data-access');
 
 module.exports = React.createClass({
@@ -86,7 +86,7 @@ module.exports = React.createClass({
             <SearchForm id="search" searchText={this.state.search.text}
                         onStartSearch={this.onStartSearch}
                         onChangeSearchText={this.onChangeSearchText} />
-            <SearchResult search={this.state.search}/>
+            <SearchResultList search={this.state.search}/>
         </div>;
     }
 });
