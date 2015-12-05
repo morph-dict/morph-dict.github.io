@@ -38,6 +38,9 @@
 # IntelliJ
 out/
 
+#Maven
+morph-dict-build-static-json/target
+
 # mpeltonen/sbt-idea plugin
 .idea_modules/
 
