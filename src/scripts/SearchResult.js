@@ -24,7 +24,8 @@ var React = require('react'),
     _ = require('underscore');
 
 var rgramtab = require('./rgramtab'),
-    RulesTables = require('./RulesTables');
+    RulesTables = require('./RulesTables'),
+    MatchedForms = require('./MatchedForms');
 
 module.exports = React.createClass({
     render: function () {
@@ -75,16 +76,7 @@ module.exports = React.createClass({
                                         <h2>
                                             {firstWordForm} - {commonAttrs.map((attr) => rgramtab.attrDesc(attr)).join(", ")}
                                         </h2>
-                                        <h3>Matched forms</h3>
-                                        { resultItem.matchedAncodeList.map(function (ancode) {
-                                            return (
-                                                <div key={ancode}>
-                                                    <h4>{
-                                                         rgramtab.ancodeAttrs(ancode).map((attr) => rgramtab.attrDesc(attr)).join(", ")
-                                                    }</h4>
-                                                </div>
-                                            )
-                                        }) }
+                                        <MatchedForms matchedAncodeList={resultItem.matchedAncodeList} commonAttrs={commonAttrs}/>
                                         <h3>Lexeme</h3>
                                             <div>basis: { resultItem.lexemeRec.basis }</div>
                                             <div>paradigmIndex: { resultItem.lexemeRec.paradigmIndex }</div>
