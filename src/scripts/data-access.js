@@ -122,11 +122,11 @@ module.exports.search = function (toSearch) {
                     return $.extend(node, {
                         lexemeRec: {
                             basis: lexemeRec[0],
-                            paradigmNum: lexemeRec[1],
-                            accentParadigmNum: lexemeRec[2],
-                            userSessionNum: lexemeRec[3],
+                            paradigmIndex: lexemeRec[1],
+                            accentParadigmIndex: lexemeRec[2],
+                            userSessionIndex: lexemeRec[3],
                             ancode: lexemeRec[4],
-                            prefixParadigmNum: lexemeRec[5]
+                            prefixParadigmIndex: lexemeRec[5]
                         }
                     })
                 })
@@ -136,9 +136,9 @@ module.exports.search = function (toSearch) {
         // Fetch prefix
         .then((data) => {
             return Promise.all(data.map((node) => {
-                if (node.lexemeRec.prefixParadigmNum !== null) {
+                if (node.lexemeRec.prefixParadigmIndex !== null) {
                     var index = indexResolver(indexFile.dictPrefixItemsPerFile);
-                    var idx = index(node.lexemeRec.prefixParadigmNum);
+                    var idx = index(node.lexemeRec.prefixParadigmIndex);
                     var fileName = dictPrefixDir + "/" + idx.base + ".json";
                     return jqPromise($.ajax(fileName)).then(function (prefixFile) {
                         var prefix = prefixFile[idx.offset];
@@ -158,7 +158,7 @@ module.exports.search = function (toSearch) {
         .then((data) => {
             return Promise.all(data.map((node) => {
                 var index = indexResolver(indexFile.dictParadigmItemsPerFile);
-                var idx = index(node.lexemeRec.paradigmNum);
+                var idx = index(node.lexemeRec.paradigmIndex);
                 var fileName = dictParadigmDir + "/" + idx.base + ".json";
                 return jqPromise($.ajax(fileName)).then((paradigmRulesFile) => {
                     var paradigmRules = paradigmRulesFile[idx.offset];
@@ -179,13 +179,13 @@ module.exports.search = function (toSearch) {
         // Group founded lexeme recs by lexems
         .then((data) => {
                 var gropedByLexeme = _.values(_.groupBy(data, (x) => (
-                    x.lexemeRec.paradigmNum
-                        + "," + x.lexemeRec.accentParadigmNum
+                    x.lexemeRec.paradigmIndex
+                        + "," + x.lexemeRec.accentParadigmIndex
                         + "," + x.lexemeRec.ancode
                         + "," + x.lexemeRec.basis
-                        + "," + x.lexemeRec.paradigmNum
-                        + "," + x.lexemeRec.prefixParadigmNum
-                        + "," + x.lexemeRec.userSessionNum
+                        + "," + x.lexemeRec.paradigmIndex
+                        + "," + x.lexemeRec.prefixParadigmIndex
+                        + "," + x.lexemeRec.userSessionIndex
                 )));
                 var mergedGroups = gropedByLexeme.map((group) => {
                     var first = group[0];

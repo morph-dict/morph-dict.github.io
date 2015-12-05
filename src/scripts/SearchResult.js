@@ -50,11 +50,11 @@ module.exports = React.createClass({
                                 var rules = <RulesTables paradigmRules={resultItem.paradigmRules} lexemeRec={resultItem.lexemeRec} globalPrefix={resultItem.prefix}/>;
 
                                 var key = resultItem.lexemeRec.basis
-                                + "," + resultItem.lexemeRec.paradigmNum
-                                + "," + resultItem.lexemeRec.accentParadigmNum
-                                + "," + resultItem.lexemeRec.userSessionNum
+                                + "," + resultItem.lexemeRec.paradigmIndex
+                                + "," + resultItem.lexemeRec.accentParadigmIndex
+                                + "," + resultItem.lexemeRec.userSessionIndex
                                 + "," + resultItem.lexemeRec.ancode
-                                + "," + resultItem.lexemeRec.prefixParadigmNum;
+                                + "," + resultItem.lexemeRec.prefixParadigmIndex;
 
 
                                 var commonAttrs = resultItem.lexemeRec.ancode ? rgramtab.ancodeAttrs(resultItem.lexemeRec.ancode) : [];
@@ -78,15 +78,15 @@ module.exports = React.createClass({
                                         }) }
                                         <h3>Lexeme</h3>
                                             <div>basis: { resultItem.lexemeRec.basis }</div>
-                                            <div>paradigmNum: { resultItem.lexemeRec.paradigmNum }</div>
-                                            <div>accentParadigmNum: { resultItem.lexemeRec.accentParadigmNum }</div>
-                                            <div>userSessionNum: { resultItem.lexemeRec.userSessionNum }</div>
+                                            <div>paradigmIndex: { resultItem.lexemeRec.paradigmIndex }</div>
+                                            <div>accentParadigmIndex: { resultItem.lexemeRec.accentParadigmIndex }</div>
+                                            <div>userSessionIndex: { resultItem.lexemeRec.userSessionIndex }</div>
                                             <div>ancode: { resultItem.lexemeRec.ancode } ({
                                                 (resultItem.lexemeRec.ancode)
                                                 ? commonAttrs.map((attr) => rgramtab.attrDesc(attr)).join(", ")
                                                 : ""
                                             })</div>
-                                            <div>prefixParadigmNum: { resultItem.lexemeRec.prefixParadigmNum }</div>
+                                            <div>prefixParadigmIndex: { resultItem.lexemeRec.prefixParadigmIndex }</div>
                                         <h3>Rules</h3>
                                         { rules }
                                     </div>
