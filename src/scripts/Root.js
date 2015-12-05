@@ -22,7 +22,8 @@
 var React = require('react'),
     update = require('react-addons-update');
 
-var SearchResult = require('./SearchResult'),
+var SearchForm = require('./SearchForm'),
+    SearchResult = require('./SearchResult'),
     dataAccess = require('./data-access');
 
 module.exports = React.createClass({
@@ -81,13 +82,11 @@ module.exports = React.createClass({
 
         //<!-- псевдоабдоминальный - word with prefix -->
         //<!-- ленина, пошла -->
-        return <form id="search" onSubmit={this.onStartSearch}>
-            <p>
-                <label>Word form: <input type="text" id="word" value={this.state.search.text}
-                                         onChange={this.onChangeSearchText}/></label>
-                <button type="submit">Search</button>
-            </p>
+        return <div>
+            <SearchForm id="search" searchText={this.state.search.text}
+                        onStartSearch={this.onStartSearch}
+                        onChangeSearchText={this.onChangeSearchText} />
             <SearchResult search={this.state.search}/>
-        </form>;
+        </div>;
     }
 });
