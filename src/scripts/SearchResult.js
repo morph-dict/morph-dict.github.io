@@ -75,24 +75,9 @@ module.exports = React.createClass({
                                         <h2>
                                             {firstWordForm} - {commonAttrs.map((attr) => rgramtab.attrDesc(attr)).join(", ")}
                                         </h2>
-                                        <MatchedFormList matchedAncodeList={resultItem.matchedAncodeList} />
-                                        <h3>Lexeme</h3>
-                                            <div>basis: { resultItem.lexemeRec.basis }</div>
-                                            <div>paradigmIndex: { resultItem.lexemeRec.paradigmIndex }</div>
-                                            <div>accentParadigmIndex: { resultItem.lexemeRec.accentParadigmIndex }</div>
-                                            <div>userSessionIndex: { resultItem.lexemeRec.userSessionIndex }</div>
-                                            <div>ancode: { resultItem.lexemeRec.ancode } ({
-                                                (resultItem.lexemeRec.ancode)
-                                                ? commonAttrs.map((attr) => rgramtab.attrDesc(attr)).join(", ")
-                                                : ""
-                                            })</div>
-                                            <div>prefixParadigmIndex: { resultItem.lexemeRec.prefixParadigmIndex }</div>
-                                        <RulesTables paradigmRuleList={resultItem.paradigmRuleList} lexemeRec={resultItem.lexemeRec} globalPrefix={resultItem.prefix}/>
+                                        <RulesTables paradigmRuleList={resultItem.paradigmRuleList} matchedAncodeList={resultItem.matchedAncodeList}  lexemeRec={resultItem.lexemeRec} globalPrefix={resultItem.prefix}/>
                                     </div>
                                 )
-
-
-
                             })
                         }
                     </div>

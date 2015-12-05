@@ -29,30 +29,23 @@ module.exports = React.createClass({
     render: function(){
         var commonAttrs = _.intersection(...this.props.paradigmRuleList.map((rule) => rgramtab.ancodeAttrs(rule.ancode)));
 
-        return <div><h5> Rules </h5>
+        return <div><h5>Полный список словоформ:</h5>
             <table>
-                <thead>
-                <tr>
-                    <th>form</th>
-                    <th>ancode</th>
-                    <th>attrs</th>
-                </tr>
-                </thead>
                 <tbody>
                 {
                     this.props.paradigmRuleList.map((rule) => {
+                        var matched = this.props.matchedAncodeList.indexOf(rule.ancode) != -1;
                         var uncommonAttrs = _.difference(rgramtab.ancodeAttrs(rule.ancode), commonAttrs);
-                        return <tr key={rule.prefix + "," + rule.ancode + "," + rule.ending}>
+                        var classNameList = matched ? ["matched"] : [];
+                        return <tr key={rule.prefix + "," + rule.ancode + "," + rule.ending} className={classNameList}>
                             <td>
                                 <span style={{color:"red"}}>{this.props.globalPrefix}</span>
                                 <span style={{color:"green"}}>{rule.prefix}</span>
                                 {this.props.lexemeRec.basis}
                                 <span style={{color:"blue"}}>{rule.ending}</span>
                             </td>
-                            <td>{rule.ancode}</td>
                             <td>
                                 {
-
                                     uncommonAttrs.map((attr) => rgramtab.attrDesc(attr)).join(", ")
                                 }
                             </td>
