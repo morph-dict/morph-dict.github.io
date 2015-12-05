@@ -61,11 +61,20 @@ module.exports = React.createClass({
                                 var commonRulesAttrs = _.intersection(...resultItem.paradigmRuleList.map((rule) => rgramtab.ancodeAttrs(rule.ancode)));
 
                                 commonAttrs = commonAttrs.concat(commonRulesAttrs);
+                                commonAttrs = commonAttrs.filter((attr) => attr !== "*");
 
-                                var firstWordForm = resultItem.lexemeRec.basis;
+                                var firstWordFormRule = resultItem.paradigmRuleList[0];
+                                var firstWordForm = ""
+                                             + (resultItem.prefix || "")
+                                             + (firstWordFormRule.prefix || "")
+                                             + resultItem.lexemeRec.basis
+                                             + (firstWordFormRule.ending || "");
 
                                 return (
                                     <div key={key} className="search-results__group">
+                                        <h2>
+                                            {firstWordForm} - {commonAttrs.map((attr) => rgramtab.attrDesc(attr)).join(", ")}
+                                        </h2>
                                         <h3>Matched forms</h3>
                                         { resultItem.matchedAncodeList.map(function (ancode) {
                                             return (
