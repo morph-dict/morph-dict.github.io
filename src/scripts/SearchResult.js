@@ -47,7 +47,7 @@ module.exports = React.createClass({
                     <div className="search-results">
                         {
                             this.props.search.result.map((resultItem) => {
-                                var rules = <RulesTables paradigmRules={resultItem.paradigmRules} lexemeRec={resultItem.lexemeRec} globalPrefix={resultItem.prefix}/>;
+                                var rules = <RulesTables paradigmRuleList={resultItem.paradigmRuleList} lexemeRec={resultItem.lexemeRec} globalPrefix={resultItem.prefix}/>;
 
                                 var key = resultItem.lexemeRec.basis
                                 + "," + resultItem.lexemeRec.paradigmIndex
@@ -58,7 +58,7 @@ module.exports = React.createClass({
 
 
                                 var commonAttrs = resultItem.lexemeRec.ancode ? rgramtab.ancodeAttrs(resultItem.lexemeRec.ancode) : [];
-                                var commonRulesAttrs = _.intersection(...resultItem.paradigmRules.map((rule) => rgramtab.ancodeAttrs(rule.ancode)));
+                                var commonRulesAttrs = _.intersection(...resultItem.paradigmRuleList.map((rule) => rgramtab.ancodeAttrs(rule.ancode)));
 
                                 commonAttrs = commonAttrs.concat(commonRulesAttrs);
 
@@ -67,7 +67,7 @@ module.exports = React.createClass({
                                 return (
                                     <div key={key} className="search-results__group">
                                         <h3>Matched forms</h3>
-                                        { resultItem.matchedAncodes.map(function (ancode) {
+                                        { resultItem.matchedAncodeList.map(function (ancode) {
                                             return (
                                                 <div key={ancode}>
                                                     <h4>{

@@ -49,8 +49,8 @@ public class Main {
                 JsonArray sub = new JsonArray();
 
                 LexemeRec lexemeRec = dictionary.lexemeRecs.get(treeData.lexemeRecIndex);
-                List<ParadigmRule> paradigmRules = dictionary.paradigmList.get(lexemeRec.paradigmIndex);
-                ParadigmRule paradigmRule = paradigmRules.get(treeData.paradigmRuleIndex);
+                List<ParadigmRule> paradigmRuleList = dictionary.paradigmList.get(lexemeRec.paradigmIndex);
+                ParadigmRule paradigmRule = paradigmRuleList.get(treeData.paradigmRuleIndex);
 
                 sub.add(paradigmRule.ancode);
                 sub.add(treeData.lexemeRecIndex);

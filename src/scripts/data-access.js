@@ -160,9 +160,9 @@ module.exports.search = function (toSearch) {
                 var index = indexResolver(indexFile.dictParadigmItemsPerFile);
                 var idx = index(node.lexemeRec.paradigmIndex);
                 var fileName = dictParadigmDir + "/" + idx.base + ".json";
-                return jqPromise($.ajax(fileName)).then((paradigmRulesFile) => {
-                    var paradigmRules = paradigmRulesFile[idx.offset];
-                    paradigmRules = paradigmRules.map((rule) => (
+                return jqPromise($.ajax(fileName)).then((paradigmRuleListFile) => {
+                    var paradigmRuleList = paradigmRuleListFile[idx.offset];
+                    paradigmRuleList = paradigmRuleList.map((rule) => (
                         {
                             ending: rule[0],
                             ancode: rule[1],
@@ -170,7 +170,7 @@ module.exports.search = function (toSearch) {
                         }
                     ));
                     return $.extend(node, {
-                        paradigmRules: paradigmRules
+                        paradigmRuleList: paradigmRuleList
                     })
                 })
             }))
@@ -190,10 +190,10 @@ module.exports.search = function (toSearch) {
                 var mergedGroups = gropedByLexeme.map((group) => {
                     var first = group[0];
                     return {
-                        matchedAncodes: group.map((item) => item.ancode),
+                        matchedAncodeList: group.map((item) => item.ancode),
                         lexemeRec: first.lexemeRec,
                         prefix: first.prefix,
-                        paradigmRules: first.paradigmRules
+                        paradigmRuleList: first.paradigmRuleList
                     }
                 });
                 return Promise.resolve(mergedGroups);
