@@ -25,7 +25,7 @@ var React = require('react'),
 
 var rgramtab = require('./rgramtab'),
     RulesTables = require('./RulesTables'),
-    MatchedForms = require('./MatchedForms');
+    MatchedFormList = require('./MatchedFormList');
 
 module.exports = React.createClass({
     render: function () {
@@ -48,7 +48,6 @@ module.exports = React.createClass({
                     <div className="search-results">
                         {
                             this.props.search.result.map((resultItem) => {
-                                var rules = <RulesTables paradigmRuleList={resultItem.paradigmRuleList} lexemeRec={resultItem.lexemeRec} globalPrefix={resultItem.prefix}/>;
 
                                 var key = resultItem.lexemeRec.basis
                                 + "," + resultItem.lexemeRec.paradigmIndex
@@ -76,7 +75,7 @@ module.exports = React.createClass({
                                         <h2>
                                             {firstWordForm} - {commonAttrs.map((attr) => rgramtab.attrDesc(attr)).join(", ")}
                                         </h2>
-                                        <MatchedForms matchedAncodeList={resultItem.matchedAncodeList} commonAttrs={commonAttrs}/>
+                                        <MatchedFormList matchedAncodeList={resultItem.matchedAncodeList} />
                                         <h3>Lexeme</h3>
                                             <div>basis: { resultItem.lexemeRec.basis }</div>
                                             <div>paradigmIndex: { resultItem.lexemeRec.paradigmIndex }</div>
@@ -88,8 +87,7 @@ module.exports = React.createClass({
                                                 : ""
                                             })</div>
                                             <div>prefixParadigmIndex: { resultItem.lexemeRec.prefixParadigmIndex }</div>
-                                        <h3>Rules</h3>
-                                        { rules }
+                                        <RulesTables paradigmRuleList={resultItem.paradigmRuleList} lexemeRec={resultItem.lexemeRec} globalPrefix={resultItem.prefix}/>
                                     </div>
                                 )
 

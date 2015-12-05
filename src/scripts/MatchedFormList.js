@@ -27,10 +27,12 @@ var rgramtab = require('./rgramtab');
 
 module.exports = React.createClass({
     render: function(){
+        var commonAttrs = _.intersection(...this.props.matchedAncodeList.map((ancode) => rgramtab.ancodeAttrs(ancode)));
+
         return <div>
             <h5>Совпавшие словоформы:</h5>
             { this.props.matchedAncodeList.map((ancode) => {
-                var uncommonAttrs = _.difference(rgramtab.ancodeAttrs(ancode), this.props.commonAttrs);
+                var uncommonAttrs = _.difference(rgramtab.ancodeAttrs(ancode), commonAttrs);
                 return (
                     <div key={ancode}>
                         <h4>{
