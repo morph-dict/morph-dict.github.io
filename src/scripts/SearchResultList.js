@@ -26,6 +26,28 @@ var React = require('react'),
 var rgramtab = require('./rgramtab'),
     RulesTables = require('./RulesTables');
 
+_.mixin({
+    intersperse: (ar, separator) => {
+        if (ar === null || ar === undefined || separator === null || separator === undefined || ar.constructor !== Array) {
+            return ar;
+        }
+        else if (ar.length < 2) {
+            return ar.slice();
+        }
+        else {
+            var result = [];
+            for (var i = 0; i < ar.length; i++) {
+                if (i > 0) {
+                    result.push(separator);
+                }
+                result.push(ar[i]);
+            }
+            return result;
+        }
+    }
+});
+
+
 module.exports = React.createClass({
     render: function () {
         if (this.props.search.state === 'waiting') {
@@ -41,7 +63,7 @@ module.exports = React.createClass({
                 <div className="search-result-list">
                     <div className="search-result-list__header">● ● ●</div>
                     {
-                        this.props.search.result.map((resultItem) => {
+                        this.props.search.result.map((resultItem, i) => {
 
                             var key = resultItem.lexemeRec.basis
                             + "," + resultItem.lexemeRec.paradigmIndex
@@ -49,8 +71,6 @@ module.exports = React.createClass({
                             + "," + resultItem.lexemeRec.userSessionIndex
                             + "," + resultItem.lexemeRec.ancode
                             + "," + resultItem.lexemeRec.prefixParadigmIndex;
-
-                            console.log();
 
                             var commonAttrs = resultItem.lexemeRec.ancode ? rgramtab.ancodeAttrs(resultItem.lexemeRec.ancode) : [];
                             var commonRulesAttrs = _.intersection(...resultItem.paradigmRuleList.map((rule) => rgramtab.ancodeAttrs(rule.ancode)));
@@ -65,14 +85,22 @@ module.exports = React.createClass({
                                          + resultItem.lexemeRec.basis
                                          + (firstWordFormRule.ending || "");
 
-                            return (
+                            var separator;
+                            if(i < this.props.search.result.length - 1) {
+                                separator = <div className="search-result-list__separator">или...</div>
+                            }
+                            else {
+                                separator = <div></div>
+                            }
+                            return [
                                 <div key={key} className="search-result-list__group">
-                                    <h2 className="search-result-list__group__header">
+                                    <div className="search-result-list__group__header">
                                         {firstWordForm} - {commonAttrs.map((attr) => rgramtab.attrDesc(attr)).join(", ")}
-                                    </h2>
+                                    </div>
                                     <RulesTables paradigmRuleList={resultItem.paradigmRuleList} matchedAncodeList={resultItem.matchedAncodeList}  lexemeRec={resultItem.lexemeRec} globalPrefix={resultItem.prefix}/>
-                                </div>
-                            )
+                                </div>,
+                                separator
+                            ]
                         })
                     }
                 </div>
