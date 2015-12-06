@@ -15,7 +15,7 @@ module.exports = React.createClass({
 
         return <form id="search" onSubmit={this.props.onStartSearch} className="search-form">
             <div>
-                <label>Слово: <input type="text" id="word" value={this.props.searchText}
+                <label>Слово: <input type="text" size="35" id="word" value={this.props.searchText}
                                                   onChange={this.props.onChangeSearchText}/></label>
                 <span> </span>
                 <button type="submit">Поиск</button>

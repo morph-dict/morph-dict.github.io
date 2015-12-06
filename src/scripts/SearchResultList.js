@@ -24,8 +24,7 @@ var React = require('react'),
     _ = require('underscore');
 
 var rgramtab = require('./rgramtab'),
-    RulesTables = require('./RulesTables'),
-    MatchedFormList = require('./MatchedFormList');
+    RulesTables = require('./RulesTables');
 
 module.exports = React.createClass({
     render: function () {
