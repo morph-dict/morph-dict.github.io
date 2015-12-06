@@ -12,16 +12,19 @@ var React = require('react'),
 module.exports = React.createClass({
 
     render: function () {
-
         var textIsEmpty = this.props.searchText.length === 0;
+        var disabled = this.props.searchState === "searching";
         return <div className="search-form">
                    <form onSubmit={this.props.onStartSearch}>
                        <div>
-                           <label>Слово для поиска: <input type="text" size="35" id="word" value={this.props.searchText}
-                                                onChange={this.props.onChangeSearchText}/></label>
+                           <label>Слово для поиска:
+                             <input type="text" size="35" id="word"
+                                    disabled={disabled}
+                                    value={this.props.searchText}
+                                    onChange={this.props.onChangeSearchText}/></label>
                            <span> </span>
                            <button type="submit"
-                                   disabled={textIsEmpty}
+                                   disabled={textIsEmpty || disabled}
                                    title={textIsEmpty ? "Сначала введите слово для поиска!" : ""}>Поиск</button>
                        </div>
                    </form>

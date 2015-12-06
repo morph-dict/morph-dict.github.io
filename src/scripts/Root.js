@@ -84,7 +84,9 @@ module.exports = React.createClass({
         //<!-- ленина, пошла -->
         return <div>
             <div className="header">Морфологический словарь русского языка</div>
-            <SearchForm id="search" searchText={this.state.search.text}
+            <SearchForm id="search"
+                        searchText={this.state.search.text}
+                        searchState={this.state.search.state}
                         onStartSearch={this.onStartSearch}
                         onChangeSearchText={this.onChangeSearchText} />
             <SearchResultList search={this.state.search}/>
