@@ -57,6 +57,9 @@ module.exports = React.createClass({
                                                                 .map(rgramtab.removeSynonyms));
                             commonAttrs = commonAttrs.concat(commonRulesAttrs);
                             commonAttrs = commonAttrs.filter((attr) => attr !== "*");
+                            commonAttrs.sort((attr1, attr2) => (
+                                rgramtab.catOrder(rgramtab.attrCat(attr1)) - rgramtab.catOrder(rgramtab.attrCat(attr2))
+                            ));
 
                             var firstWordFormRule = resultItem.paradigmRuleList[0];
                             var firstWordForm = ""
