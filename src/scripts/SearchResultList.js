@@ -69,20 +69,19 @@ module.exports = React.createClass({
                                          + (firstWordFormRule.ending || "");
 
                             var separator;
-                            if(i < this.props.search.result.length - 1) {
-                                separator = <div className="search-result-list__separator">или...</div>
+                            if(i === 0) {
+                                separator = <span>Слово образовано</span>
                             }
                             else {
-                                separator = <div></div>
+                                separator = <span>... или</span>
                             }
                             return [
                                 <div key={key} className="search-result-list__group">
                                     <div className="search-result-list__group__header">
-                                        {firstWordForm} - {commonAttrs.map((attr) => rgramtab.attrDesc(attr)).join(", ")}
+                                        {separator} от <b>«{firstWordForm}»</b> - {commonAttrs.map((attr) => rgramtab.attrDesc(attr)).join(", ")}
                                     </div>
                                     <RulesTables paradigmRuleList={resultItem.paradigmRuleList} matchedAncodeList={resultItem.matchedAncodeList}  lexemeRec={resultItem.lexemeRec} globalPrefix={resultItem.prefix}/>
-                                </div>,
-                                separator
+                                </div>
                             ]
                         })
                     }

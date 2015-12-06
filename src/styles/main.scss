@@ -35,10 +35,11 @@ table {
     text-align: center;
   }
   &__group {
+    margin-bottom: 4rem;
+
     &__header {
       text-align: center;
       font-size: 1.5rem;
-      font-weight: bold;
     }
   }
   &__separator {
