@@ -25,10 +25,11 @@ table {
 .search-result-list__message {
   text-align: center; }
 
-.search-result-list__group__header {
-  text-align: center;
-  font-size: 1.5rem;
-  font-weight: bold; }
+.search-result-list__group {
+  margin-bottom: 4rem; }
+  .search-result-list__group__header {
+    text-align: center;
+    font-size: 1.5rem; }
 
 .search-result-list__separator {
   text-align: center;
