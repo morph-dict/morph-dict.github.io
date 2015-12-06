@@ -83,7 +83,7 @@ module.exports = React.createClass({
         //<!-- псевдоабдоминальный - word with prefix -->
         //<!-- ленина, пошла -->
         return <div>
-            <div className="header">Морфологический словарь русского языка</div>
+            <div className="header">Морфологический словарь<br/>русского языка</div>
             <SearchForm id="search"
                         searchText={this.state.search.text}
                         searchState={this.state.search.state}

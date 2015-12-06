@@ -18,7 +18,8 @@ module.exports = React.createClass({
                    <form onSubmit={this.props.onStartSearch}>
                        <div>
                            <label>Слово для поиска:
-                             <input type="text" size="35" id="word"
+                           <span> </span>
+                           <input type="text" size="35" id="word"
                                     disabled={disabled}
                                     value={this.props.searchText}
                                     onChange={this.props.onChangeSearchText}/></label>
