@@ -40,16 +40,16 @@ module.exports = React.createClass({
                         var classNameList = ['rules-table__word-form-row'];
                         classNameList = classNameList.concat(matched ? ['rules-table__word-form-row--matched'] : []);
                         return <tr key={rule.prefix + "," + rule.ancode + "," + rule.ending} className={classNameList.join(' ')}>
-                            <td>
+                            <td className="rules-table__word-form-row__word-td">
                                 <span>{this.props.globalPrefix}</span>
                                 <span>{rule.prefix}</span>
                                 {this.props.lexemeRec.basis}
                                 <span>{rule.ending}</span>
                             </td>
-                            <td>
+                            <td className="rules-table__word-form-row__dash-td">
                             &mdash;
                             </td>
-                            <td>
+                            <td className="rules-table__word-form-row__attrs-td">
                                 {
                                     uncommonAttrs.map((attr) => rgramtab.attrDesc(attr)).join(", ")
                                 }

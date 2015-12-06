@@ -57,10 +57,30 @@ table {
     margin: 1rem 0;
   }
   &__word-form-row {
-    &--matched * {
-      font-weight: bold;
+    &--matched {
+      > * {
+        font-weight: bold;
+      }
+      > td {
+        background: beige;
+      }
     }
+    &__word-td, &__dash-td, &__attrs-td  {
+      padding: 3px 8px;
+    }
+    &__word-td {
+      border-radius: 5px 0 0 5px;
+    }
+    &__attrs-td {
+      border-radius: 0 5px 5px 0;
+    }
+
   }
+
+  > table {
+    border-collapse: collapse;
+  }
+
 }
 
 .search-form {
