@@ -1,6 +1,9 @@
 /* Global properties */
 html {
-  font-size: 12pt;
+  font-family: 'PT Serif', 'Georgia', serif;
+  font-size: 12pt; }
+
+input, button {
   font-family: 'PT Serif', 'Georgia', serif; }
 
 table {

@@ -1,7 +1,15 @@
 /* Global properties */
-html {
-  font-size: 12pt;
+@mixin default-font {
   font-family: 'PT Serif', 'Georgia', serif;
+}
+
+html {
+  @include default-font;
+  font-size: 12pt;
+}
+
+input, button {
+  @include default-font;
 }
 
 table {

@@ -50,6 +50,7 @@ module.exports = React.createClass({
                             + "," + resultItem.lexemeRec.ancode
                             + "," + resultItem.lexemeRec.prefixParadigmIndex;
 
+                            console.log();
 
                             var commonAttrs = resultItem.lexemeRec.ancode ? rgramtab.ancodeAttrs(resultItem.lexemeRec.ancode) : [];
                             var commonRulesAttrs = _.intersection(...resultItem.paradigmRuleList.map((rule) => rgramtab.ancodeAttrs(rule.ancode)));
