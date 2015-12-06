@@ -13,13 +13,14 @@ module.exports = React.createClass({
 
     render: function () {
 
+        var textIsEmpty = this.props.searchText.length === 0;
         return <div className="search-form">
                    <form onSubmit={this.props.onStartSearch}>
                        <div>
-                           <label>Слово: <input type="text" size="35" id="word" value={this.props.searchText}
+                           <label>Слово для поиска: <input type="text" size="35" id="word" value={this.props.searchText}
                                                 onChange={this.props.onChangeSearchText}/></label>
                            <span> </span>
-                           <button type="submit">Поиск</button>
+                           <button type="submit" disabled={textIsEmpty} title={textIsEmpty ? "Сначала введите слово для поиска!" : ""}>Поиск</button>
                        </div>
                    </form>
                </div>;
