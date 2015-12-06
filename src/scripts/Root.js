@@ -48,7 +48,7 @@ module.exports = React.createClass({
 
     onStartSearch: function (e) {
         e.preventDefault();
-        var toSearch = this.state.search.text;
+        var toSearch = this.state.search.text.trim();
         this.setState(update(this.state, {
             search: {
                 state: {$set: 'searching'},

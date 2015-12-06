@@ -40,7 +40,7 @@ function indexResolver(perFile) {
 
 module.exports.search = function (toSearch) {
 
-    toSearch = toSearch.toLowerCase();
+    toSearch = toSearch.toLowerCase().trim();
 
     var dataRoot = "data";
 
