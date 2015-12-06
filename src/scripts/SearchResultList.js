@@ -30,23 +30,17 @@ var rgramtab = require('./rgramtab'),
 module.exports = React.createClass({
     render: function () {
         if (this.props.search.state === 'waiting') {
-            return <div className="search-result-list">
-                <div  className="search-result-list__message">Вы еще ничего не искали :(</div>
-            </div> // todo: use another text
+            return <div className="search-result-list"></div>
         }
         else if (this.props.search.state === 'searching') {
             return <div className="search-result-list">
-                <div className="search-result-list__message">Searching...</div>
+                <div className="search-result-list__message">Поиск...</div>
             </div>;
         }
         else if (this.props.search.state === 'done') {
-            // todo: use another text
-
-            //<div>{JSON.stringify(this.props.search.result)}</div>
-
             return (
                 <div className="search-result-list">
-                    <h2 className="search-result-list__header">Результаты поиска</h2>
+                    <div className="search-result-list__header">● ● ●</div>
                     {
                         this.props.search.result.map((resultItem) => {
 

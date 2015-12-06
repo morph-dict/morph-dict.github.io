@@ -1,2 +1,39 @@
-.search-results__group {
-  border: 8px solid black; }
+/* Global properties */
+html {
+  font-size: 12pt;
+  font-family: 'PT Serif', 'Georgia', serif; }
+
+table {
+  margin: 0 auto; }
+
+/* components */
+.header {
+  text-align: center;
+  font-size: 1.75rem;
+  margin: 3rem 0; }
+
+.search-result-list__header {
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: bold; }
+
+.search-result-list__message {
+  text-align: center; }
+
+.search-result-list__group {
+  margin: 0 0 5rem 0; }
+  .search-result-list__group__header {
+    text-align: center; }
+
+.rules-table__header {
+  text-align: center; }
+
+.rules-table__word-form-row--matched * {
+  font-weight: bold; }
+
+.search-form {
+  text-align: center;
+  margin-top: 2em;
+  margin-bottom: 2em; }
+  .search-form * {
+    font-size: 1.2rem; }

@@ -14,11 +14,12 @@ module.exports = React.createClass({
     render: function () {
 
         return <form id="search" onSubmit={this.props.onStartSearch} className="search-form">
-            <p>
-                <label>Введите словоформу: <input type="text" id="word" value={this.props.searchText}
+            <div>
+                <label>Слово: <input type="text" id="word" value={this.props.searchText}
                                                   onChange={this.props.onChangeSearchText}/></label>
-                <button type="submit">Search</button>
-            </p>
+                <span> </span>
+                <button type="submit">Поиск</button>
+            </div>
         </form>;
     }
 });

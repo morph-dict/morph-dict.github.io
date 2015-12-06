@@ -30,7 +30,7 @@ module.exports = React.createClass({
         var commonAttrs = _.intersection(...this.props.paradigmRuleList.map((rule) => rgramtab.ancodeAttrs(rule.ancode)));
 
         return <div className="rules-table">
-            <h5 className="rules-table__header">Словоформы:</h5>
+            <h5 className="rules-table__header">Все словоформы:</h5>
             <table>
                 <tbody>
                 {
