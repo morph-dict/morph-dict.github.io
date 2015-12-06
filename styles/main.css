@@ -42,8 +42,23 @@ table {
   font-style: italic;
   margin: 1rem 0; }
 
-.rules-table__word-form-row--matched * {
+.rules-table__word-form-row--matched > * {
   font-weight: bold; }
+
+.rules-table__word-form-row--matched > td {
+  background: beige; }
+
+.rules-table__word-form-row__word-td, .rules-table__word-form-row__dash-td, .rules-table__word-form-row__attrs-td {
+  padding: 3px 8px; }
+
+.rules-table__word-form-row__word-td {
+  border-radius: 5px 0 0 5px; }
+
+.rules-table__word-form-row__attrs-td {
+  border-radius: 0 5px 5px 0; }
+
+.rules-table > table {
+  border-collapse: collapse; }
 
 .search-form {
   text-align: center;
