@@ -200,11 +200,7 @@ module.exports.search = function (toSearch) {
         })
 
         .then((data) => {
-            return new Promise((done, fail) => {
-                setTimeout(() => {
-                    done(data);
-                }, 1000);
-            });
+            return Promise.resolve(data);
         });
             
         return promise;
