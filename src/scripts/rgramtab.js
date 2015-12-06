@@ -830,3 +830,15 @@ module.exports.attrDesc = function(attr){
         default: throw new Error("Unknown attribute: " + attr);
     }
 };
+
+
+var attrSynonyms = {
+    "КР_ПРИЛ": "П",
+    "ИНФИНИТИВ": "Г",
+    "ДЕЕПРИЧАСТИЕ": "Г",
+    "ПРИЧАСТИЕ": "Г",
+    "КР_ПРИЧАСТИЕ": "Г",
+    "Г": "Г"
+};
+
+module.exports.removeSynonyms = (attrs) => attrs.map((attr) => attrSynonyms[attr] ? attrSynonyms[attr] : attr);

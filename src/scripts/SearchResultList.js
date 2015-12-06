@@ -26,27 +26,6 @@ var React = require('react'),
 var rgramtab = require('./rgramtab'),
     RulesTables = require('./RulesTables');
 
-_.mixin({
-    intersperse: (ar, separator) => {
-        if (ar === null || ar === undefined || separator === null || separator === undefined || ar.constructor !== Array) {
-            return ar;
-        }
-        else if (ar.length < 2) {
-            return ar.slice();
-        }
-        else {
-            var result = [];
-            for (var i = 0; i < ar.length; i++) {
-                if (i > 0) {
-                    result.push(separator);
-                }
-                result.push(ar[i]);
-            }
-            return result;
-        }
-    }
-});
-
 
 module.exports = React.createClass({
     render: function () {
@@ -73,8 +52,9 @@ module.exports = React.createClass({
                             + "," + resultItem.lexemeRec.prefixParadigmIndex;
 
                             var commonAttrs = resultItem.lexemeRec.ancode ? rgramtab.ancodeAttrs(resultItem.lexemeRec.ancode) : [];
-                            var commonRulesAttrs = _.intersection(...resultItem.paradigmRuleList.map((rule) => rgramtab.ancodeAttrs(rule.ancode)));
-
+                            var commonRulesAttrs = _.intersection(...resultItem.paradigmRuleList
+                                                                .map((rule) => rgramtab.ancodeAttrs(rule.ancode))
+                                                                .map(rgramtab.removeSynonyms));
                             commonAttrs = commonAttrs.concat(commonRulesAttrs);
                             commonAttrs = commonAttrs.filter((attr) => attr !== "*");
 
