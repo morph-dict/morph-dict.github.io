@@ -20,7 +20,9 @@ module.exports = React.createClass({
                            <label>Слово для поиска: <input type="text" size="35" id="word" value={this.props.searchText}
                                                 onChange={this.props.onChangeSearchText}/></label>
                            <span> </span>
-                           <button type="submit" disabled={textIsEmpty} title={textIsEmpty ? "Сначала введите слово для поиска!" : ""}>Поиск</button>
+                           <button type="submit"
+                                   disabled={textIsEmpty}
+                                   title={textIsEmpty ? "Сначала введите слово для поиска!" : ""}>Поиск</button>
                        </div>
                    </form>
                </div>;

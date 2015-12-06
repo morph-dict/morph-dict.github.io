@@ -69,4 +69,7 @@ table {
   * {
     font-size: 1.2rem;
   }
+  &__submit-button--hidden {
+    visibility: hidden;
+  }
 }

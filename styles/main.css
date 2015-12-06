@@ -50,3 +50,5 @@ table {
   margin-bottom: 2em; }
   .search-form * {
     font-size: 1.2rem; }
+  .search-form__submit-button--hidden {
+    visibility: hidden; }
