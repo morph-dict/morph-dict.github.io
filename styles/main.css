@@ -18,18 +18,28 @@ table {
 .search-result-list__header {
   text-align: center;
   font-size: 1.2rem;
-  font-weight: bold; }
+  font-weight: bold;
+  margin: 2rem 0; }
 
 .search-result-list__message {
   text-align: center; }
 
-.search-result-list__group {
-  margin: 0 0 5rem 0; }
-  .search-result-list__group__header {
-    text-align: center; }
+.search-result-list__group__header {
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: bold; }
+
+.search-result-list__separator {
+  text-align: center;
+  margin: 3rem;
+  font-size: 0.8rem;
+  font-style: italic;
+  font-weight: bolder; }
 
 .rules-table__header {
-  text-align: center; }
+  text-align: center;
+  font-style: italic;
+  margin: 1rem 0; }
 
 .rules-table__word-form-row--matched * {
   font-weight: bold; }
