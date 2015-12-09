@@ -23,15 +23,16 @@ var gulp = require('gulp'),
     gutil = require('gulp-util'),
     sass = require('gulp-sass'),
     watch = require('gulp-watch'),
-    symlink = require('gulp-watch'),
+    streamify = require('gulp-streamify'),
+    uglify = require('gulp-uglify'),
     browserify = require('browserify'),
     reactify = require('reactify'),
     source = require('vinyl-source-stream'),
     watchify = require('watchify'),
-    fs = require('fs'),
-    streamify = require('gulp-streamify'),
-    uglify = require('gulp-uglify'),
-    anybar = require('anybar');
+    anybar = require('anybar'),
+
+    fs = require('fs');
+
 
 
 
